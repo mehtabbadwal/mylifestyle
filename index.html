@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Life + Ayur">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☯</text></svg>">
+<title>Lifestyle Medicine + Ayurveda Guide</title>
+<style>
+  :root {
+    --saffron: #C17817;
+    --saffron-light: #E8A84C;
+    --turmeric: #D4A843;
+    --earth: #5C4A32;
+    --earth-light: #7A6548;
+    --sage: #6B7F5E;
+    --sage-light: #8FA67E;
+    --cream: #FAF6F0;
+    --warm-white: #FFFDF9;
+    --text: #2E2418;
+    --text-muted: #6B5D4F;
+    --border: #E8E0D4;
+    --card-bg: #FFFFFF;
+    --yes: #4A7A4A;
+    --caution: #B8860B;
+    --no: #A0522D;
+    --radius: 14px;
+    --shadow: 0 2px 12px rgba(92,74,50,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 15px;
+    padding-bottom: 80px;
+    padding-top: env(safe-area-inset-top);
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--earth) 0%, var(--saffron) 100%);
+    padding: 20px 20px 16px;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 2px;
+  }
+  .header .subtitle {
+    font-size: 12px;
+    opacity: 0.8;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* Tab Navigation */
+  .tab-nav {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 68px;
+    z-index: 99;
+    padding: 0 8px;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 12px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--saffron);
+    border-bottom-color: var(--saffron);
+  }
+
+  /* Sub-tab Navigation */
+  .subtab-nav {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 16px;
+    gap: 8px;
+  }
+  .subtab-nav::-webkit-scrollbar { display: none; }
+  .subtab-btn {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .subtab-btn.active {
+    background: var(--saffron);
+    color: white;
+    border-color: var(--saffron);
+  }
+
+  /* Content */
+  .tab-content { display: none; padding: 0 16px 20px; }
+  .tab-content.active { display: block; }
+  .subtab-content { display: none; }
+  .subtab-content.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--earth);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon { font-size: 18px; }
+
+  /* Section headers */
+  .section-header {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--earth);
+    margin: 20px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--turmeric);
+  }
+
+  /* Badge system */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .badge-eat { background: #E8F5E9; color: var(--yes); }
+  .badge-limit { background: #FFF8E1; color: var(--caution); }
+  .badge-avoid { background: #FBE9E7; color: var(--no); }
+  .badge-lm { background: #E3F2FD; color: #1565C0; }
+  .badge-ayur { background: #FFF3E0; color: #E65100; }
+
+  /* Food items */
+  .food-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .food-item:last-child { border-bottom: none; }
+  .food-name {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .food-detail {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+  .food-tip {
+    font-size: 12px;
+    background: #F5F0E8;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-top: 6px;
+    color: var(--earth);
+    border-left: 3px solid var(--turmeric);
+  }
+
+  /* Grain comparison */
+  .grain-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .grain-row:last-child { border-bottom: none; }
+  .grain-name { font-weight: 700; flex: 1; }
+  .grain-meta { text-align: right; color: var(--text-muted); font-size: 12px; }
+
+  /* Rating dots */
+  .rating {
+    display: flex;
+    gap: 3px;
+    margin-top: 2px;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .dot.filled { background: var(--sage); }
+
+  /* Protocol box */
+  .protocol {
+    background: linear-gradient(135deg, #F5F0E8 0%, #EDE6D8 100%);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin: 16px 0;
+    border: 1px solid var(--turmeric);
+  }
+  .protocol-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--saffron);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .protocol-step {
+    font-size: 13px;
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+  .protocol-step::before {
+    content: attr(data-step);
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    color: var(--saffron);
+  }
+
+  /* Pillar overview */
+  .pillar-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--saffron);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .pillar-card:active { transform: scale(0.98); }
+  .pillar-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--saffron);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .pillar-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--earth);
+    margin: 2px 0;
+  }
+  .pillar-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .pillar-status {
+    font-size: 11px;
+    margin-top: 6px;
+    color: var(--sage);
+    font-weight: 600;
+  }
+
+  /* Collapsible */
+  .collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+  .collapsible-header .arrow {
+    transition: transform 0.2s;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .collapsible-header.open .arrow { transform: rotate(90deg); }
+  .collapsible-body {
+    display: none;
+    padding-top: 8px;
+  }
+  .collapsible-body.open { display: block; }
+
+  /* Dual view */
+  .dual-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 8px 0;
+  }
+  .dual-box {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 12px;
+  }
+  .dual-lm {
+    background: #E3F2FD;
+    border: 1px solid #BBDEFB;
+  }
+  .dual-ayur {
+    background: #FFF3E0;
+    border: 1px solid #FFE0B2;
+  }
+  .dual-label {
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .dual-lm .dual-label { color: #1565C0; }
+  .dual-ayur .dual-label { color: #E65100; }
+
+  /* Search */
+  .search-bar {
+    padding: 12px 16px;
+    position: sticky;
+    top: 108px;
+    z-index: 50;
+    background: var(--cream);
+  }
+  .search-input {
+    width: 100%;
+    padding: 10px 14px 10px 36px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    background: var(--card-bg);
+    color: var(--text);
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .search-input:focus { border-color: var(--saffron); }
+  .search-icon {
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* Quick ref banner */
+  .quick-ref {
+    background: linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%);
+    color: white;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+  .quick-ref strong { font-size: 14px; }
+
+  /* Constitution banner */
+  .constitution {
+    background: linear-gradient(135deg, var(--earth) 0%, var(--earth-light) 100%);
+    color: white;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    margin: 16px 0;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .constitution strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+  }
+  .compare-table th {
+    text-align: left;
+    padding: 8px 6px;
+    font-weight: 700;
+    color: var(--earth);
+    border-bottom: 2px solid var(--turmeric);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .compare-table td {
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Footer nav */
+  .footer-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--warm-white);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+    z-index: 100;
+  }
+  .footer-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 10px;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 12px;
+    gap: 2px;
+  }
+  .footer-btn.active { color: var(--saffron); }
+  .footer-btn .f-icon { font-size: 20px; }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .tab-content.active { animation: fadeIn 0.25s ease; }
+
+  /* Print-friendly */
+  @media print {
+    .tab-nav, .footer-nav, .search-bar { display: none; }
+    .tab-content { display: block !important; }
+    .header { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Life + Āyur</h1>
+  <div class="subtitle">Lifestyle Medicine × Ayurveda — Personalized Guide</div>
+</div>
+
+<!-- Main Tab Navigation -->
+<div class="tab-nav" id="mainTabs">
+  <button class="tab-btn active" data-tab="overview">Overview</button>
+  <button class="tab-btn" data-tab="food">Food</button>
+  <button class="tab-btn" data-tab="grains">Grains</button>
+  <button class="tab-btn" data-tab="flours">Flours</button>
+  <button class="tab-btn" data-tab="kitchen">Kitchen</button>
+  <button class="tab-btn" data-tab="waters">Waters</button>
+  <button class="tab-btn" data-tab="workout">Workout</button>
+  <button class="tab-btn" data-tab="pillars">6 Pillars</button>
+  <button class="tab-btn" data-tab="protocols">Protocols</button>
+</div>
+
+<!-- ==================== OVERVIEW TAB ==================== -->
+<div class="tab-content active" id="tab-overview">
+  <div style="padding-top:16px">
+
+  <div class="constitution">
+    <strong>Your Constitution Profile</strong>
+    Cancer Lagna (29°28' Ashlesha Gandanta) · Mandagni (low digestive fire) · Agni strongest 10am–2pm · Cortisol-driven belly fat pattern · 80–90g daily protein target · No eating after 8pm · Lunch = largest meal
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">☯</span> Your Dosha Map</div>
+    <div class="food-detail" style="margin-bottom:8px">You're not a single dosha type — you're a complex pattern where different doshas govern different layers:</div>
+    <div class="food-item">
+      <div class="food-name">Body: Vata <span class="badge badge-lm">Primary</span></div>
+      <div class="food-detail">Cancer lagna at Ashlesha gandanta, Moon in Swati nakshatra. Vata governs your physical frame — tendency toward dryness, joint stiffness, variable energy, sensitivity to cold in extremities. The gandanta point adds an underlying instability that craves grounding.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Internal Heat: Pitta <span class="badge badge-ayur">Secondary</span></div>
+      <div class="food-detail">Exalted Sun in Aries (10th house) generates significant internal heat. This is why you run hot at night and sweat — you're not pure Vata cold. Cool room for sleep is correct for you even though Vata theory says warm. Always trust your body's signals over textbook dosha rules.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Digestion: Kapha (Mandagni) <span class="badge badge-avoid">Key Constraint</span></div>
+      <div class="food-detail">Your digestive fire is naturally low and slow. Heavy foods, cold foods, large portions, and late eating all suppress agni further. This is the single most important factor in every food decision — can your body actually transform this into nourishment?</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Mind: Vata <span class="badge badge-lm">Moon in Libra</span></div>
+      <div class="food-detail">Moon in Libra (Swati nakshatra, 25% strength) creates a restless, oscillating mind — weighing options endlessly, replaying conversations, planning tomorrow while lying in bed. Nadi Shodhana, mantra, and grounding practices address this layer specifically.</div>
+    </div>
+    <div class="food-tip">
+      <strong>What this means practically:</strong> Warm, cooked, grounding food (Vata body). Cool sleeping environment (Pitta heat). Light, easily digestible meals (Kapha digestion). Calming, structured routines (Vata mind). No single dosha protocol fits you — every recommendation in this guide accounts for this layered pattern.
+    </div>
+  </div>
+
+  <div class="quick-ref">
+    <strong>The Core Principle</strong><br>
+    Both systems agree: whole, minimally processed plant foods as the foundation. Warm, cooked, spiced food at regular times. The body heals itself when given the right conditions.
+  </div>
+
+  <h3 class="section-header">The Six Pillars</h3>
+
+  <div class="pillar-card" onclick="switchToTab('pillars')">
+    <div class="pillar-num">Pillar 1</div>
+    <div class="pillar-name">Whole Food Nutrition</div>
+    <div class="pillar-desc">Plant-predominant, whole grains, spice-as-medicine</div>
+    <div class="pillar-status">✦ Detailed guide available</div>
+  </div>
+
+  <div class="pillar-card">
+    <div class="pillar-num">Pillar 2</div>
+    <div class="pillar-name">Physical Activity</div>
+    <div class="pillar-desc">Cortisol-aware, strength + yoga, calm-paced</div>
+    <div class="pillar-status">✦ Detailed guide available</div>
+  </div>
+
+  <div class="pillar-card">
+    <div class="pillar-num">Pillar 3</div>
+    <div class="pillar-name">Restorative Sleep</div>
+    <div class="pillar-desc">Circadian rhythm, Oura tracking, sleep hygiene</div>
+    <div class="pillar-status">✦ Detailed guide available</div>
+  </div>
+
+  <div class="pillar-card">
+    <div class="pillar-num">Pillar 4</div>
+    <div class="pillar-name">Stress Management</div>
+    <div class="pillar-desc">Pranayama, mantra, nervous system regulation</div>
+    <div class="pillar-status">✦ Detailed guide available</div>
+  </div>
+
+  <div class="pillar-card">
+    <div class="pillar-num">Pillar 5</div>
+    <div class="pillar-name">Avoidance of Risky Substances</div>
+    <div class="pillar-desc">UPFs, endocrine disruptors, incompatible combinations</div>
+    <div class="pillar-status">✦ Detailed guide available</div>
+  </div>
+
+  <div class="pillar-card">
+    <div class="pillar-num">Pillar 6</div>
+    <div class="pillar-name">Social Connection</div>
+    <div class="pillar-desc">Community, relationships, belonging</div>
+    <div class="pillar-status">✦ Detailed guide available</div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title"><span class="icon">☯</span> Where They Converge</div>
+    <div class="food-detail">
+      Both treat the whole person, not isolated symptoms. Both center diet, sleep, movement, and stress. Both believe the body heals when given the right conditions. Ayurveda's <em>dinacharya</em> (daily routine) maps onto lifestyle medicine's structured approach to circadian health.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">◈</span> Where They Diverge</div>
+    <div class="food-detail">
+      Ayurveda is constitutional (prakriti-based, personalized). Lifestyle medicine is population-level and evidence-based. Ayurveda integrates spiritual practice, prana, agni, and ojas. Lifestyle medicine adds the social connection pillar as a measurable disease risk factor — something Ayurveda addressed through community ritual rather than as a standalone intervention.
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<!-- ==================== FOOD TAB ==================== -->
+<div class="tab-content" id="tab-food">
+  <div style="padding-top:8px">
+
+  <div class="subtab-nav">
+    <button class="subtab-btn active" data-subtab="food-eat">Eat More</button>
+    <button class="subtab-btn" data-subtab="food-fruits">Fruits</button>
+    <button class="subtab-btn" data-subtab="food-limit">Limit</button>
+    <button class="subtab-btn" data-subtab="food-avoid">Avoid</button>
+    <button class="subtab-btn" data-subtab="food-gray">Gray Zone</button>
+  </div>
+
+  <!-- EAT MORE -->
+  <div class="subtab-content active" id="subtab-food-eat">
+    <div class="card">
+      <div class="food-item">
+        <div class="food-name">Cooked Vegetables <span class="badge badge-eat">Eat Daily</span></div>
+        <div class="food-detail">Tori, lauki, palak, karela, gobhi, baingan. Cooked > raw, especially at dinner. Lighter gourds in summer, root vegetables in winter.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Moong Dal <span class="badge badge-eat">Eat Daily</span></div>
+        <div class="food-detail">Most digestible legume in Ayurveda. Recommended for every constitution. Complete protein when paired with rice.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Ghee (1–2 tsp/day) <span class="badge badge-eat">Eat Daily</span></div>
+        <div class="food-detail">Kindles agni without aggravating Pitta. Carries nutrients into tissues, supports ojas. Coats starch granules (lipid-amylose complex) slowing glucose absorption.</div>
+        <div class="dual-view">
+          <div class="dual-box dual-lm"><div class="dual-label">Lifestyle Med</div>Saturated fat, but 1-2 tsp daily is metabolically insignificant in plant-heavy diet</div>
+          <div class="dual-box dual-ayur"><div class="dual-label">Āyurveda</div>Medicine, not indulgence. Agni-kindling, ojas-building, nutrient carrier</div>
+        </div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Spices as Medicine <span class="badge badge-eat">Every Meal</span></div>
+        <div class="food-detail">Haldi, jeera, ajwain, hing, adrak, kali mirch. Not flavor — digestive interventions. Hing in every dal = mandagni prescription.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Besan (Chickpea Flour) <span class="badge badge-eat">3–4x/week</span></div>
+        <div class="food-detail">~20g protein per 100g. GI ~35-40. Lekhana (fat-scraping) quality. Cheela, kadhi, missi roti, thickener. Always cook thoroughly. Pair with ghee + ajwain.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Kadhi <span class="badge badge-eat">Weekly</span></div>
+        <div class="food-detail">Besan + buttermilk + turmeric + tadka. Protein + probiotics + anti-inflammatory + digestive support in one dish. Complete lifestyle medicine meal.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Daliya (Broken Wheat) <span class="badge badge-eat">2–3x/week</span></div>
+        <div class="food-detail">Superior to suji for upma/porridge. Retains bran and germ. Light, warm, easy on mandagni. Ideal breakfast base.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Soaked Almonds (Peeled) <span class="badge badge-eat">Daily</span></div>
+        <div class="food-detail">Soak overnight, peel skin in morning. Skin is heavy and aggravates Pitta. Soaking activates nutrients and makes fats more bioavailable. 5–8 almonds daily for brain health, sustained energy, and protein.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Morning empty stomach as-is. Or chop into daliya/oatmeal. Blend into smoothie. Grind into almond chutney with mint + green chili. Sliced on top of kheer or halwa (occasional). Mamra almonds (Indian) have 50% oil vs 25-30% in California almonds.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Flaxseeds (Alsi) <span class="badge badge-eat">3–4x/week</span></div>
+        <div class="food-detail">Omega-3 rich, hormonal balancing (lignans support estrogen balance), high fiber, aids digestion. Cooling in nature. Must grind fresh — whole seeds pass through undigested.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Grind 1 tbsp in coffee grinder. Sprinkle on daliya porridge or upma. Mix into besan cheela batter. Stir into warm dal after cooking (don't boil). Add to roti dough. Sprinkle on yogurt at lunch. Store ground alsi in fridge (goes rancid fast). Never cook with flaxseed oil.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Sesame Seeds (Til) <span class="badge badge-limit">Seasonal/Winter</span></div>
+        <div class="food-detail">Warming, Vata-balancing, rich in calcium, magnesium, iron, zinc. Considered sacred in Ayurveda — associated with vitality. Best Oct–Mar. Too heating for summer.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Dry roast and sprinkle on salads or sabzi. Til chutney with jaggery (winter snack). Til laddoo (with jaggery, not sugar). Sprinkle on stir-fries. Tahini in hummus or dressings. Add to roti dough in winter. Til + gur eaten during Makar Sankranti is actually medicinal, not just tradition.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Pumpkin Seeds <span class="badge badge-eat">Regular</span></div>
+        <div class="food-detail">High zinc (immune support), magnesium (sleep + muscle recovery), and protein (~30g per 100g). Light and easy to digest. Good snack option.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Handful as afternoon snack (raw or lightly roasted with rock salt). Sprinkle on soups and salads. Add to trail mix with roasted chana. Blend into smoothies. Toss into upma or poha while cooking. Mix into roti dough for protein boost.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Walnuts (Akhrot) <span class="badge badge-eat">3–4/day</span></div>
+        <div class="food-detail">Highest omega-3 of any nut. Brain-shaped for brain health. Anti-inflammatory. Heavy — limit to 3-4 daily, not handfuls.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Soak overnight and eat morning with almonds (soaking makes them lighter on digestion). Chop into salads. Add to daliya or oatmeal. Crush and sprinkle on banana. Walnut + jaggery as winter afternoon snack. Add to besan laddoo mix.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Fermented Foods <span class="badge badge-eat">Regular</span></div>
+        <div class="food-detail">Probiotics that support gut microbiome and agni. Chaas/buttermilk (best for your constitution), naturally fermented idli/dosa batter, kanji (fermented black carrot — seasonal, cooling), homemade pickles in mustard oil.</div>
+        <div class="food-tip">Small quantities alongside meals, not as the meal itself. Ayurveda recommends fermented foods in moderation — excess increases Pitta and histamine.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Kitchari (Digestive Reset) <span class="badge badge-eat">As Needed</span></div>
+        <div class="food-detail">Moong dal + basmati rice + ghee + turmeric + jeera + hing. The Ayurvedic system reboot. When digestion feels off, bloated, or sluggish — one full day of kitchari-only eating resets agni. Both systems agree: simplifying food load gives the digestive system a chance to recover.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRUITS -->
+  <div class="subtab-content" id="subtab-food-fruits">
+    <div class="quick-ref" style="margin-top:12px">
+      <strong>Cardinal Rule</strong><br>
+      Eat fruits alone — 30 min before or 1 hour after meals. Never mix with grains, dairy, or protein. Room temp, not cold from fridge. Mid-morning (10-11am) or mid-afternoon (3-4pm) are best windows. Cooked/warm fruits > cold raw for mandagni.
+    </div>
+
+    <h3 class="section-header" style="margin-top:16px">Best for Your Constitution</h3>
+    <div class="card">
+      <div class="food-item">
+        <div class="food-name">Pomegranate (Anar) <span class="badge badge-eat">Top pick</span></div>
+        <div class="food-detail">Astringent, digestive, actively burns ama. Balances Pitta. Low GI, high antioxidants. Classical texts prescribe pomegranate chutney as an appetite enhancer.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Eat seeds fresh. Juice at home (no store-bought). Pomegranate raita at lunch. Sprinkle seeds on salads. Anardana (dried pomegranate) in chutneys and as digestive.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Stewed Apple <span class="badge badge-eat">Morning</span></div>
+        <div class="food-detail">Cooked apple with cinnamon + cardamom creates ojas and eases constipation. Raw sour apples aggravate Vata. Cooked = medicine for mandagni.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Peel, chop, simmer with a little water + pinch cinnamon + cardamom until soft (5-7 min). Eat warm as first thing or mid-morning. Can batch-cook 2-3 days' worth.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Papaya <span class="badge badge-eat">Regular</span></div>
+        <div class="food-detail">Contains papain — natural digestive enzyme. Light, warm in nature, directly supports sluggish digestion. Best mid-morning fruit for mandagni.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Fresh, room temp, with a squeeze of lemon + pinch of black pepper (enhances digestion). Avoid if pregnant (traditional caution).</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Berries <span class="badge badge-eat">Regular</span></div>
+        <div class="food-detail">Strawberries, blueberries, raspberries. Low GI, highest antioxidants of any fruit category. Light enough for Kapha tendencies. Anti-inflammatory powerhouse in lifestyle medicine.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Room temp, as mid-morning or afternoon snack. Add to warm daliya or oatmeal. Don't mix with milk/yogurt (viruddha ahara with sour fruits).</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Pears (Nashpati) <span class="badge badge-eat">Regular</span></div>
+        <div class="food-detail">Light, quick energy, good for hormonal balance. Sweet without being heavy. One of the few fruits Ayurveda calls uplifting for emotions.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Guava (Amrood) <span class="badge badge-eat">Seasonal</span></div>
+        <div class="food-detail">Extremely high fiber, low GI, rich in vitamin C. Light and astringent — one of the best fruits for blood sugar management. Good for belly fat goal.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Amla (Indian Gooseberry) <span class="badge badge-eat">Rasayana</span></div>
+        <div class="food-detail">Vitamin C powerhouse (20x more than orange). Rasayana (rejuvenative) in Ayurveda. Tart and astringent. One of the three fruits in triphala.</div>
+        <div class="food-tip"><strong>How to eat:</strong> Fresh (seasonal), amla powder in warm water, amla candy/murabba (watch sugar content). Already getting some via your nightly triphala.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Kiwi <span class="badge badge-eat">Regular</span></div>
+        <div class="food-detail">Contains actinidin (digestive enzyme). High vitamin C, low GI. Light and tart. Research shows benefits for constipation and gut motility.</div>
+      </div>
+    </div>
+
+    <h3 class="section-header">Limit</h3>
+    <div class="card">
+      <div class="food-item">
+        <div class="food-name">Banana <span class="badge badge-limit">Occasional lunch</span></div>
+        <div class="food-detail">Heavy, sweet, Kapha-increasing, mucus-forming. Never at night, never on empty stomach. Never with milk (viruddha ahara). Okay occasionally at lunch when agni is strongest.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Mango <span class="badge badge-limit">Seasonal only</span></div>
+        <div class="food-detail">King of Ayurvedic fruits but increases Kapha. Ripe only (unripe aggravates Pitta + Vata). Small portion at lunch in summer. Builds rasa (nutritional fluid) but heavy for mandagni.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Grapes <span class="badge badge-limit">Small amounts</span></div>
+        <div class="food-detail">Sweet and heavy. Better as soaked raisins (kishmish) — lighter, good for constipation. Soak 5-6 overnight, eat morning.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Dates (Khajoor) <span class="badge badge-limit">Winter / 1-2 only</span></div>
+        <div class="food-detail">Very heavy, sweet, dense. 1-2 in winter with a little ghee for energy is acceptable. Not in summer, not daily. Builds ojas but burdens mandagni in quantity.</div>
+      </div>
+    </div>
+
+    <h3 class="section-header">Avoid</h3>
+    <div class="card">
+      <div class="food-item">
+        <div class="food-name">Watermelon / Melon <span class="badge badge-avoid">Worst for mandagni</span></div>
+        <div class="food-detail">Very cold, watery, heavy. Among the worst fruits for your constitution. Never with meals. Never with salt (viruddha ahara — common Indian habit). If eating: alone, room temp, at lunch only.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Fruit Juice (any) <span class="badge badge-avoid">Skip entirely</span></div>
+        <div class="food-detail">Concentrated sugar without fiber. Spikes blood sugar aggressively. Both systems agree: eat the whole fruit, never juice it. Even fresh-squeezed OJ is a sugar bomb without fiber buffer.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Dried Fruits in Excess <span class="badge badge-avoid">Limit quantity</span></div>
+        <div class="food-detail">Too concentrated and dense. Small amounts of soaked raisins or figs (anjeer) are fine. Handfuls of dried fruit = hidden sugar overload.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIMIT -->
+  <div class="subtab-content" id="subtab-food-limit">
+    <div class="card">
+      <div class="food-item">
+        <div class="food-name">Paneer <span class="badge badge-limit">Occasional</span></div>
+        <div class="food-detail">Better than aged cheese (fresh, unaged). Still cold, heavy, wet — Kapha-increasing. Occasional protein source, not staple.</div>
+        <div class="food-tip">At lunch only. Room temp, not cold. Pair with black pepper + jeera.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Cottage Cheese <span class="badge badge-limit">Occasional</span></div>
+        <div class="food-detail">Less channel-blocking than aged cheese but still cold, dense, wet. Not ideal for mandagni as daily staple.</div>
+        <div class="food-tip">Lunch only. Room temp. Add kali mirch + roasted jeera. Don't use as primary protein filler.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Wheat Atta <span class="badge badge-limit">2–3x/week</span></div>
+        <div class="food-detail">Technically whole grain but heavy (guru), sticky (snigdha), channel-clogging in excess. Modern wheat is high-gluten, harder on mandagni. Reduce from daily to rotation.</div>
+        <div class="food-tip">Best as wheat-barley blend (60:40). One roti at lunch max. Rotate with jowar, ragi, bajra.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Yogurt/Dahi <span class="badge badge-limit">Lunch only</span></div>
+        <div class="food-detail">Never after sunset — increases Kapha, mucus, dampens evening agni. At lunch: fine. As chaas/lassi with roasted jeera + rock salt: even better.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Suji (Semolina) <span class="badge badge-limit">Occasional</span></div>
+        <div class="food-detail">Refined wheat in granular form. High GI (65-70), low fiber. Lighter than atta on digestion but no nutritional depth.</div>
+        <div class="food-tip">Upma with lots of vegetables + ghee occasionally is fine. Swap to daliya for regular use. Suji halwa = dessert, not health food.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Oats <span class="badge badge-limit">Cooked only</span></div>
+        <div class="food-detail">Steel-cut, cooked warm with spices = fine. Instant oats and overnight cold oats = heavy, Kapha-increasing for your constitution.</div>
+        <div class="food-tip">Cook hot with cinnamon, cardamom, a little ghee. Never cold overnight oats.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Coffee <span class="badge badge-limit">1 cup AM</span></div>
+        <div class="food-detail">Lifestyle med: neutral to positive (antioxidants). Ayurveda: rajasic, Vata-aggravating. Afternoon coffee disrupts sleep + cortisol rhythm → directly works against belly fat goal.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AVOID -->
+  <div class="subtab-content" id="subtab-food-avoid">
+    <div class="card">
+      <div class="food-item">
+        <div class="food-name">Aged Cheese <span class="badge badge-avoid">Avoid</span></div>
+        <div class="food-detail">Cheddar, parmesan, pepper jack. Both systems agree: calorie-dense, inflammatory, channel-blocking (abhishyandi). Directly suppresses agni. Worst food for mandagni.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Large Meat Portions <span class="badge badge-avoid">Avoid</span></div>
+        <div class="food-detail">Causes digestive distress, restlessness, reflux, disrupted sleep. Classic mandagni signal. Small chicken at lunch, fish occasionally = your calibrated limit.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Cold Drinks with Meals <span class="badge badge-avoid">Avoid</span></div>
+        <div class="food-detail">Slows enzymatic activity (LM). Douses agni directly (Ayurveda). Warm or room temp water only with meals.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Maida (Refined Flour) <span class="badge badge-avoid">Avoid</span></div>
+        <div class="food-detail">Heavy, sticky, constipating for mandagni. Naan, samosas, pakoras from restaurants — occasional indulgence only, not routine.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">White Sugar <span class="badge badge-avoid">Avoid</span></div>
+        <div class="food-detail">Depleting in Ayurveda. Pro-inflammatory in lifestyle medicine. Use jaggery (gur) in small amounts instead — warming, aids digestion.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Corn Starch <span class="badge badge-avoid">Minimize</span></div>
+        <div class="food-detail">Pure extracted starch. GI 85+. Zero fiber, protein, or micronutrients. Channel-clogging without any nutritional benefit.</div>
+        <div class="food-tip">Swap: arrowroot powder (3/4 the amount, same glossy finish). Or besan slurry for home cooking. Occasional corn starch in Indo-Chinese is not a crisis.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Processed/Packaged Foods <span class="badge badge-avoid">Avoid</span></div>
+        <div class="food-detail">Seed oils, preservatives, added sugars. Risk areas: packaged namkeen, chips, store-bought sauces, ready dressings. Your batch cooking already protects you.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Fish + Dairy Together <span class="badge badge-avoid">Never</span></div>
+        <div class="food-detail">Viruddha ahara (incompatible food combination). No fish tikka with raita — choose one or the other.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRAY ZONE -->
+  <div class="subtab-content" id="subtab-food-gray">
+    <div class="card">
+      <div class="food-item">
+        <div class="food-name">Eggs <span class="badge badge-lm">LM: Yes</span> <span class="badge badge-ayur">Ayur: Tamasic</span></div>
+        <div class="food-detail">Lifestyle med: past the cholesterol fear, excellent protein. Ayurveda: tamasic but highly digestible. Your right anchor for protein targets.</div>
+        <div class="food-tip">Always cooked and warm. Not cold from fridge as meal prep salad.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Fish <span class="badge badge-eat">Both: Favorable</span></div>
+        <div class="food-detail">Both systems prefer over red meat. Good protein source for occasional rotation.</div>
+        <div class="food-tip">Never combine with dairy (viruddha ahara). Keep portions moderate.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Raw Salads <span class="badge badge-limit">Context-dependent</span></div>
+        <div class="food-detail">Workable at lunch (agni strongest). Less ideal at dinner. Cold blended drinks more problematic than raw salad.</div>
+      </div>
+      <div class="food-item">
+        <div class="food-name">Makki Atta (Corn Flour) <span class="badge badge-limit">Seasonal</span></div>
+        <div class="food-detail">Different from corn starch — whole corn ground with bran. Gluten-free, warming. Sarson ka saag + makki roti = good winter meal. Too heating for summer.</div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<!-- ==================== GRAINS TAB ==================== -->
+<div class="tab-content" id="tab-grains">
+  <div style="padding-top:16px">
+
+  <div class="quick-ref">
+    <strong>Grain Principle</strong><br>
+    Diversity matters more than finding one "perfect" grain. Monoculture eating (wheat at every meal, only rice) is the problem regardless of which grain.
+  </div>
+
+  <h3 class="section-header">Rice Hierarchy</h3>
+  <div class="card">
+    <div class="grain-row">
+      <div>
+        <div class="grain-name">Aged Basmati + Drain Method</div>
+        <div style="font-size:11px;color:var(--sage)">Best. Closest to purana shali. GI 50-58. Classical Ayurvedic gold standard.</div>
+      </div>
+      <div class="rating"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+    </div>
+    <div class="grain-row">
+      <div>
+        <div class="grain-name">Hand-Pounded Sona Masoori</div>
+        <div style="font-size:11px;color:var(--sage)">Best of both — light variety + bran retained. Semi-polished look.</div>
+      </div>
+      <div class="rating"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div>
+    </div>
+    <div class="grain-row">
+      <div>
+        <div class="grain-name">Red Rice / Brown Rice</div>
+        <div style="font-size:11px;color:var(--sage)">Raktashali equivalent. Full bran. May be heavy on mandagni.</div>
+      </div>
+      <div class="rating"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+    <div class="grain-row">
+      <div>
+        <div class="grain-name">Regular Basmati (white)</div>
+        <div style="font-size:11px;color:var(--text-muted)">Polished but low GI. Better than Sona Masoori for blood sugar.</div>
+      </div>
+      <div class="rating"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+    <div class="grain-row">
+      <div>
+        <div class="grain-name">Sona Masoori (white, polished)</div>
+        <div style="font-size:11px;color:var(--text-muted)">Lower cal but GI ~72 (high). Lighter to digest but spikes sugar.</div>
+      </div>
+      <div class="rating"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Your Rice Protocol</div>
+    <div class="protocol-step" data-step="1.">Aged Basmati (or regular Basmati)</div>
+    <div class="protocol-step" data-step="2.">1:6 or 1:8 rice-to-water ratio (excess water)</div>
+    <div class="protocol-step" data-step="3.">Boil until 80% cooked</div>
+    <div class="protocol-step" data-step="4.">Drain the kanji (starchy water) completely</div>
+    <div class="protocol-step" data-step="5.">Return to very low heat, lid on, 5 min to steam-finish</div>
+    <div class="protocol-step" data-step="6.">Stir in ½ tsp ghee while hot</div>
+    <div class="protocol-step" data-step="•">Eat at lunch with dal + sabzi. Reduces starch 10–30%.</div>
+  </div>
+
+  <h3 class="section-header">Sona Masoori vs Basmati</h3>
+  <div class="card">
+    <table class="compare-table">
+      <tr><th>Factor</th><th>Basmati</th><th>Sona Masoori</th></tr>
+      <tr><td><strong>GI</strong></td><td style="color:var(--yes)">50–58 ✓</td><td style="color:var(--no)">~72</td></tr>
+      <tr><td><strong>Calories</strong></td><td>Slightly higher</td><td style="color:var(--yes)">Slightly lower ✓</td></tr>
+      <tr><td><strong>Digestion</strong></td><td>Heavier, separate grains</td><td style="color:var(--yes)">Lighter, softer ✓</td></tr>
+      <tr><td><strong>Protein</strong></td><td style="color:var(--yes)">Slightly higher ✓</td><td>Slightly lower</td></tr>
+      <tr><td><strong>Belly fat</strong></td><td style="color:var(--yes)">Lower insulin spike ✓</td><td>Higher spike</td></tr>
+      <tr><td><strong>Āyurveda</strong></td><td style="color:var(--yes)">Praised (purana shali) ✓</td><td>Modern hybrid, not in texts</td></tr>
+      <tr><td><strong>Starch type</strong></td><td>High amylose (slow)</td><td>High amylopectin (fast)</td></tr>
+    </table>
+  </div>
+
+  <h3 class="section-header">Hand-Pounded Rice</h3>
+  <div class="card">
+    <div class="food-detail" style="margin-bottom:8px">
+      <strong>What it is:</strong> A processing method, not a variety. Husk removed by mortar/pestle, bran stays mostly intact. Color is off-white/beige (not dark brown like full brown rice).
+    </div>
+    <div class="food-detail" style="margin-bottom:8px">
+      <strong>Best product:</strong> 24 Mantra Organic Hand Pounded Sona Masoori (10 lb, Amazon). Also on Weee! and Instacart.
+    </div>
+    <div class="food-tip">Needs 6–8 hour soak. 1:2 ratio in pressure cooker, low flame, two whistles. Plan for batch cooking: soak overnight, cook morning.</div>
+  </div>
+
+  <h3 class="section-header">Other Whole Grains</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Barley (Jau) <span class="badge badge-eat">Top pick</span></div>
+      <div class="food-detail">Beta-glucan fiber (heart-healthy). Ayurveda specifically prescribes for reducing meda dhatu (fat tissue) and clearing channels. Actively helps belly fat. Cook like rice, add to soups, or use jau atta.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Ragi (Finger Millet) <span class="badge badge-eat">2x/week</span></div>
+      <div class="food-detail">Highest calcium of any grain. High fiber, excellent iron, low GI. Light and easy to digest. Roti, dosa, or porridge.</div>
+      <div class="food-tip">Slightly cooling — pair with ajwain or dry ginger in winter.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Jowar (Sorghum) <span class="badge badge-eat">2x/week</span></div>
+      <div class="food-detail">Gluten-free, high fiber, good protein, low GI. Dry and light — counters heaviness and water retention. Best for belly fat among millets.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Bajra (Pearl Millet) <span class="badge badge-limit">Winter</span></div>
+      <div class="food-detail">Very warming. High iron and magnesium. Vata-balancing, strength-building. Too heating for San Diego summers. Best Oct–Mar.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Kuttu (Buckwheat) <span class="badge badge-eat">Regular</span></div>
+      <div class="food-detail">Not wheat. Gluten-free, complete protein, all essential amino acids. Light and easy to digest. Pancakes, porridge, roti.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Amaranth (Rajgira) <span class="badge badge-eat">Regular</span></div>
+      <div class="food-detail">Complete protein, high lysine (amino acid most grains lack), very high calcium and iron. Porridge or popped as snack.</div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<!-- ==================== FLOURS TAB ==================== -->
+<div class="tab-content" id="tab-flours">
+  <div style="padding-top:16px">
+
+  <div class="quick-ref">
+    <strong>Mixing Principle</strong><br>
+    Lifestyle medicine says mix for nutritional diversity. Ayurveda says one grain per meal, rotated across days — each grain requires different digestive processing. For mandagni: respect the Ayurvedic caution. Max two-grain blends with complementary qualities.
+  </div>
+
+  <h3 class="section-header">Flour Rankings</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Besan (Chickpea) <span class="badge badge-eat">Top 3</span></div>
+      <div class="food-detail">20g protein/100g. GI ~35. Lekhana (fat-scraping). Kindles agni. Addresses protein gap, belly fat, blood sugar, and weak agni simultaneously.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Jowar Atta <span class="badge badge-eat">Top 3</span></div>
+      <div class="food-detail">Gluten-free, light, dry. Best millet flour for belly fat. Dense roti texture takes getting used to.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Barley Atta (Jau) <span class="badge badge-eat">Top 3</span></div>
+      <div class="food-detail">Channel-clearing, meda dhatu-reducing. Best blended 40% with wheat (60:40 wheat-barley). Classical Ayurvedic combination.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Ragi Atta <span class="badge badge-eat">Regular</span></div>
+      <div class="food-detail">Calcium powerhouse. Cooling — good for summer, pair with warming spices in winter.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Kuttu Atta <span class="badge badge-eat">Regular</span></div>
+      <div class="food-detail">Complete protein, gluten-free, light. Beyond Navratri — deserves regular rotation.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Wheat Atta <span class="badge badge-limit">Reduce</span></div>
+      <div class="food-detail">Heavy, sticky, channel-clogging in excess. Fine milling = behaves closer to refined grain for blood sugar. Reduce from daily to 2-3x/week.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Makki Atta <span class="badge badge-limit">Seasonal</span></div>
+      <div class="food-detail">Whole corn with bran. Gluten-free, warming. Good for winter. Too heating in summer.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Rice Flour <span class="badge badge-limit">Occasional</span></div>
+      <div class="food-detail">Same GI as white rice but worse — grinding increases surface area. Only for occasional dosa/idli.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Suji (Semolina) <span class="badge badge-limit">Occasional</span></div>
+      <div class="food-detail">Refined wheat in granular form. GI 65-70. Lighter than atta but no nutritional depth. Use daliya instead.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Corn Starch <span class="badge badge-avoid">Minimize</span></div>
+      <div class="food-detail">Pure extracted starch. GI 85+. Zero nutrition. Use arrowroot powder (¾ amount) or besan slurry instead.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Good Flour Combinations</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Wheat + Barley (60:40) <span class="badge badge-eat">Classical</span></div>
+      <div class="food-detail">Classical Ayurvedic pairing. Barley's lightness counters wheat's heaviness. Lighter roti that actively supports belly fat reduction.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Jowar + Ragi (50:50) <span class="badge badge-eat">Compatible</span></div>
+      <div class="food-detail">Both light, gluten-free. Jowar slightly warming, ragi slightly cooling — they balance each other.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Bajra + Wheat <span class="badge badge-limit">Winter only</span></div>
+      <div class="food-detail">Bajra's heat tempered by wheat's cooler quality. Traditional Rajasthani combo. Good Oct–Mar only.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Wheat + Besan (60:40) = Missi Roti <span class="badge badge-eat">Excellent</span></div>
+      <div class="food-detail">Higher protein, lower GI than pure wheat. Add ajwain + kasuri methi. Your grandmother's nutritional engineering.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Avoid Combining</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Bajra + Ragi <span class="badge badge-avoid">Incompatible</span></div>
+      <div class="food-detail">Very heating + cooling. Pull digestion in opposite directions.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">5-7 Grain Multigrain Atta <span class="badge badge-avoid">Skip</span></div>
+      <div class="food-detail">Too many conflicting energies for mandagni. Usually 60-70% wheat with token amounts of others. Marketing > nutrition.</div>
+    </div>
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Your Weekly Rotation</div>
+    <div class="protocol-step" data-step="→">Jowar roti — 2 days</div>
+    <div class="protocol-step" data-step="→">Wheat-barley blend roti — 2 days</div>
+    <div class="protocol-step" data-step="→">Ragi roti or ragi dosa — 1 day</div>
+    <div class="protocol-step" data-step="→">Remaining meals: Basmati rice (drain method)</div>
+    <div class="protocol-step" data-step="→">Besan cheela breakfast — 3 mornings/week</div>
+  </div>
+
+  </div>
+</div>
+
+<!-- ==================== KITCHEN TAB ==================== -->
+<div class="tab-content" id="tab-kitchen">
+  <div style="padding-top:16px">
+
+  <h3 class="section-header">Starch Thickener Alternatives</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Arrowroot Powder <span class="badge badge-eat">Best swap</span></div>
+      <div class="food-detail">Same glossy finish as corn starch. Thickens at lower temperature. Easier to digest. Ayurveda considers it light and soothing. Use ¾ the amount of corn starch.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Besan Slurry <span class="badge badge-eat">Home cooking</span></div>
+      <div class="food-detail">1 tsp besan whisked into cold water. Won't give glossy Chinese-restaurant look but thickens well and adds protein. Best for gravies, dal makhani, sabzi.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Kuzu (Kudzu Starch) <span class="badge badge-limit">Premium</span></div>
+      <div class="food-detail">Japanese root starch, considered medicinal. Beautiful clear sauce. Expensive and harder to find.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Cook Down Naturally <span class="badge badge-eat">Best practice</span></div>
+      <div class="food-detail">Most Punjabi gravies don't need starch — onion paste, cashew paste, or yogurt base provides body naturally. Cook longer, not thicker.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Sweetener Hierarchy</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Jaggery (Gur) <span class="badge badge-eat">Preferred</span></div>
+      <div class="food-detail">Warming, aids digestion. Acceptable in small amounts in both systems. Mineral content (iron, potassium) that white sugar lacks entirely.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Honey (Raw) <span class="badge badge-limit">Never heat</span></div>
+      <div class="food-detail">Ayurveda: medicinal raw, toxic when heated above 40°C. Never cook with honey or add to hot drinks. Cold/warm water only.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">White Sugar <span class="badge badge-avoid">Avoid</span></div>
+      <div class="food-detail">Depleting (Ayurveda). Pro-inflammatory (LM). No redeeming qualities in either system.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Meal Timing</h3>
+  <div class="card">
+    <div class="food-detail">
+      <strong>Breakfast (7–8am):</strong> Light, warm. Besan cheela, daliya upma, ragi porridge, or eggs.<br><br>
+      <strong>Lunch (12–1:30pm):</strong> Largest meal. Peak agni (Pitta time). Dal + sabzi + roti/rice + small protein. Yogurt/chaas okay here.<br><br>
+      <strong>Dinner (6:30–7:30pm):</strong> Light, cooked. Khichdi, soup, light sabzi with rice. No yogurt, no raw salad, no heavy protein.<br><br>
+      <strong>Cutoff:</strong> Nothing after 8pm. 12–14 hour overnight fast.
+    </div>
+  </div>
+
+  <h3 class="section-header">Cooking Method Matters</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Rice: Open Pot + Drain</div>
+      <div class="food-detail">Excess water method removes 10-30% starch. Pressure cooking raises GI by making rice too soft. Open pot > pressure cooker for blood sugar.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Besan: Always Fully Cooked</div>
+      <div class="food-detail">Raw besan = bloating + gas. Phytic acid and trypsin inhibitors interfere with protein absorption. Roast in dry pan or ghee before use.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Vegetables: Cooked > Raw</div>
+      <div class="food-detail">Especially at dinner. Light sauté, steam, or in gravy. Raw = harder on mandagni. Exception: lunch salad in summer is workable.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Cooking Oils</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Ghee <span class="badge badge-eat">Daily — 1-2 tsp</span></div>
+      <div class="food-detail">Best for high-heat cooking. Stable at high temperatures (smoke point ~485°F). Kindles agni, carries nutrients into tissues. Use for tadka, roti finishing, rice. Both systems agree at small doses.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Avocado Oil <span class="badge badge-eat">Your primary cooking oil ✓</span></div>
+      <div class="food-detail">Excellent choice. Highest smoke point of any cooking oil (~520°F) — ideal for sautéing, roasting, stir-frying. Rich in oleic acid (same heart-healthy monounsaturated fat as olive oil). Neutral flavor doesn't compete with Indian spices. Lifestyle medicine loves it. Ayurveda considers it cooling and nourishing — good for Pitta balance.</div>
+      <div class="food-tip">Your ghee + avocado oil combination covers all your cooking needs. Ghee for tadka and flavor, avocado oil for everything else.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Cold-Pressed Mustard Oil (Sarson) <span class="badge badge-eat">Punjabi staple</span></div>
+      <div class="food-detail">Warming, stimulates digestion, antibacterial. Traditional Punjabi cooking oil. Rich in omega-3 (alpha-linolenic acid). Best for achaar, sabzi, and tadka. Smoke it first (heat until it just starts smoking, then cool slightly before adding ingredients) to neutralize erucic acid.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Coconut Oil <span class="badge badge-eat">Summer / Light cooking</span></div>
+      <div class="food-detail">Cooling, light, easy to digest. MCTs provide quick energy. Best for summer cooking, South Indian dishes, and low-heat sautéing. Ayurveda considers it one of the lightest oils.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Sesame Oil (Til) <span class="badge badge-limit">Winter / External</span></div>
+      <div class="food-detail">Very warming. Best for winter cooking and abhyanga (self-massage). Vata-balancing. Too heating for daily summer cooking in San Diego.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Olive Oil (Extra Virgin) <span class="badge badge-eat">Cold use only</span></div>
+      <div class="food-detail">Lifestyle medicine gold standard for heart health (Mediterranean diet). Best used cold — drizzle on cooked food, salad dressings. Low smoke point (~375°F) — don't use for Indian cooking or high-heat sautéing.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Seed Oils (Canola, Soybean, Sunflower) <span class="badge badge-avoid">Avoid</span></div>
+      <div class="food-detail">Highly processed, pro-inflammatory, high omega-6. Both systems agree: no place in daily cooking. Main risk is through packaged foods and restaurant cooking.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Pre-Meal Agni Kindler</h3>
+  <div class="protocol">
+    <div class="protocol-title">Ginger + Lemon + Rock Salt (Before Lunch)</div>
+    <div class="protocol-step" data-step="→">Grate a small piece of fresh ginger into a cup</div>
+    <div class="protocol-step" data-step="→">Pour hot water, steep 3–4 minutes</div>
+    <div class="protocol-step" data-step="→">Squeeze half a lemon, pinch of rock salt</div>
+    <div class="protocol-step" data-step="→">Strain, drink warm 10–15 minutes before lunch</div>
+    <div class="protocol-step" data-step="•">Classical Ayurvedic prescription for mandagni. Gingerols + warm water fire up digestive enzymes before food arrives. Especially useful on days when appetite feels low.</div>
+    <div class="protocol-step" data-step="•">Shortcut: grate ginger in the morning, keep in fridge. Drop a pinch into hot water before lunch.</div>
+  </div>
+
+  </div>
+</div>
+<div class="tab-content" id="tab-waters">
+  <div style="padding-top:16px">
+
+  <div class="quick-ref">
+    <strong>Your Two Non-Negotiables</strong><br>
+    CCF Tea most mornings + Methi Water 3x/week. Everything else is optional bonus. Consistency with two beats seven things abandoned after a week.
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Nightly Prep (10 seconds)</div>
+    <div class="protocol-step" data-step="→">Most nights: ½ tsp jeera + ½ tsp dhaniya + ½ tsp saunf in a glass of water</div>
+    <div class="protocol-step" data-step="→">3 nights/week: 1 tsp methi seeds in a glass of water instead</div>
+    <div class="protocol-step" data-step=" "> </div>
+    <div class="protocol-title" style="margin-top:8px">Morning (30 seconds)</div>
+    <div class="protocol-step" data-step="→">Strain into a cup</div>
+    <div class="protocol-step" data-step="→">Warm for 30 seconds (microwave or stovetop)</div>
+    <div class="protocol-step" data-step="→">Drink. Discard seeds. Done.</div>
+    <div class="protocol-step" data-step="→">Eat breakfast 20–30 minutes later</div>
+  </div>
+
+  <h3 class="section-header">The Essential Two</h3>
+
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">CCF Tea (Jeera + Dhaniya + Saunf) <span class="badge badge-eat">Daily Staple</span></div>
+      <div class="food-detail">The single most balanced digestive formula in Ayurveda. Jeera kindles agni, dhaniya cools Pitta, saunf relaxes the gut. Covers all bases without any single ingredient overpowering. Safer than plain jeera water daily because coriander and fennel prevent excess heat buildup.</div>
+      <div class="dual-view">
+        <div class="dual-box dual-lm"><div class="dual-label">Lifestyle Med</div>Cumin supports digestive enzymes + blood sugar. Coriander anti-inflammatory. Fennel antispasmodic for gut.</div>
+        <div class="dual-box dual-ayur"><div class="dual-label">Āyurveda</div>Deepana + pachana. Tridoshic balance. Specifically therapeutic for mandagni — kindles fire without burning.</div>
+      </div>
+      <div class="food-tip">Soak ½ tsp each overnight. Strain, warm, drink. No chewing needed — the overnight soak extracts the key compounds.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Methi (Fenugreek) Water <span class="badge badge-eat">3x/week</span></div>
+      <div class="food-detail">Directly targets belly fat and blood sugar. Soluble fiber slows sugar absorption, improves insulin sensitivity (AIIMS/ICMR research). Bitter taste is specifically Kapha-reducing. Reduces meda dhatu (fat tissue) and supports agni.</div>
+      <div class="dual-view">
+        <div class="dual-box dual-lm"><div class="dual-label">Lifestyle Med</div>Clinical evidence for fasting glucose improvement. Soluble fiber slows sugar absorption. Supports weight management.</div>
+        <div class="dual-box dual-ayur"><div class="dual-label">Āyurveda</div>Warming, bitter, metabolic regulator. Reduces meda dhatu. Lubricates intestines. Don't combine with ajwain same morning — too much heat.</div>
+      </div>
+      <div class="food-tip">Soak 1 tsp overnight. Strain, warm, drink. Discard seeds. Blood sugar benefits still come through the water without chewing seeds.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">The Full Reference</h3>
+
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Jeera (Cumin) Water <span class="badge badge-lm">Strong Evidence</span></div>
+      <div class="food-detail">Cuminaldehyde and thymol support digestive enzyme activity, ease bloating, and help with blood sugar regulation. For mandagni, this is directly therapeutic — kindles agni without excess heat. Best as part of CCF blend rather than solo daily (can be too heating alone over time).</div>
+      <div class="food-tip">If drinking solo: lightly crush 1 tsp seeds, simmer in 250ml water for 5–10 min, strain. Hot extraction is more potent than cold soak.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Dhaniya (Coriander) Water <span class="badge badge-eat">Gentle Daily</span></div>
+      <div class="food-detail">Cooling, Pitta-reducing, supports kidney and urinary tract. Cools inflammation, relieves acidity and heartburn, supports liver detox. The most gentle water for Cancer lagna — no risk of overheating. Underrated and under-discussed.</div>
+      <div class="food-tip">Soak 1 tbsp coriander seeds overnight, strain, drink morning. Can also be part of CCF blend.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Saunf (Fennel) Water <span class="badge badge-eat">Post-Meal</span></div>
+      <div class="food-detail">Cooling unlike jeera and ajwain. Smooth muscle relaxation in GI tract — good for cramping, IBS, sluggish digestion. Tridoshic (balances all three doshas). Mildly estrogenic — may support hormonal balance. One of the few spices that kindles agni while cooling Pitta simultaneously.</div>
+      <div class="food-tip">Best after lunch or dinner as a digestive closer. Also fine as part of CCF tea in the morning.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Ajwain (Carom) Water <span class="badge badge-limit">As Needed</span></div>
+      <div class="food-detail">Strongest agni-kindler of the group. Contains thymol — potent antispasmodic for gas, bloating, cramping. Almost too strong for daily use. Intensely warming and drying.</div>
+      <div class="food-tip">Rescue remedy, not daily habit. Use after heavy meals, social eating, or bloating days. Don't combine with methi water — too much heat together.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Rose Water / Gulkand <span class="badge badge-limit">Seasonal</span></div>
+      <div class="food-detail">Pitta-shamak (heat-reducing). Cools without weakening digestion — rare quality. Relieves acidity, heartburn, stress-induced heat. Opens heart chakra, increases patience and compassion. Aligns with Ashlesha lagna's emotional intensity — rose is a softener.</div>
+      <div class="dual-view">
+        <div class="dual-box dual-ayur"><div class="dual-label">Gulkand</div>½ tsp max with warm water, morning only. Contains sugar — use sparingly. Best May–Sept.</div>
+        <div class="dual-box dual-lm"><div class="dual-label">Rose Water</div>Pure rose water (no sugar) in afternoon drinking water. A few drops anytime. Better option than gulkand.</div>
+      </div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Warm Lemon + Rock Salt <span class="badge badge-eat">Optional Add</span></div>
+      <div class="food-detail">Stimulates peristalsis. Lemon kindles agni (sour taste). Rock salt (sendha namak) provides minerals and electrolyte balance after overnight fast. Lifestyle medicine staple too.</div>
+      <div class="food-tip">If adding this: drink first, 15–20 min before spice water. But don't make it a barrier — if it's one more step that stops you, skip it and just do CCF/methi.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Quick Comparison</h3>
+  <div class="card">
+    <table class="compare-table">
+      <tr><th>Water</th><th>Nature</th><th>Best For</th><th>When</th></tr>
+      <tr><td><strong>CCF Tea</strong></td><td style="color:var(--yes)">Balanced</td><td>Overall digestion, mandagni</td><td>Daily AM</td></tr>
+      <tr><td><strong>Methi</strong></td><td style="color:var(--caution)">Warming</td><td>Blood sugar, belly fat</td><td>3x/week AM</td></tr>
+      <tr><td><strong>Jeera</strong></td><td style="color:var(--caution)">Warming</td><td>Agni, enzyme support</td><td>Part of CCF</td></tr>
+      <tr><td><strong>Dhaniya</strong></td><td style="color:var(--yes)">Cooling</td><td>Pitta, liver, kidneys</td><td>Part of CCF</td></tr>
+      <tr><td><strong>Saunf</strong></td><td style="color:var(--yes)">Cooling</td><td>Gut relaxation, cramping</td><td>Post-meal</td></tr>
+      <tr><td><strong>Ajwain</strong></td><td style="color:var(--no)">Very hot</td><td>Bloating rescue</td><td>As needed</td></tr>
+      <tr><td><strong>Rose</strong></td><td style="color:var(--yes)">Cooling</td><td>Summer Pitta, acidity</td><td>Seasonal</td></tr>
+    </table>
+  </div>
+
+  </div>
+</div>
+
+<!-- ==================== WORKOUT TAB ==================== -->
+<div class="tab-content" id="tab-workout">
+  <div style="padding-top:16px">
+
+  <div class="quick-ref">
+    <strong>Hybrid Movement System — Plan v6</strong><br>
+    4 strength days (30 min gym, in and out) + daily movement snacks throughout the day + morning yoga at home. Max 5 exercises per strength session. Wednesday = yoga recovery OR makeup strength day if a session was missed.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔥</span> Training Rules</div>
+    <div class="food-detail" style="font-size:12px">
+      <strong>No Fight Mode:</strong> If breathless, anxious, or rushed — slow down. Longer rest. Lower weight.<br>
+      <strong>5 Exercises Max:</strong> Every slot must earn its place. Compounds over isolation. Quality over quantity.<br>
+      <strong>30 Min In & Out:</strong> Gym is for strength only. Cardio and mobility handled by daily movement snacks.<br>
+      <strong>Breathing Closes Every Session:</strong> 2 min extended exhale (inhale 4, exhale 6-8). Non-negotiable.<br>
+      <strong>Rib Safety:</strong> No unsupported bent-over rows. Seated cable or chest-supported only.<br>
+      <strong>Venus Rule:</strong> Movement should feel good. If it feels like punishment, you'll quit.<br>
+      <strong>Nasal Breathing:</strong> If you must mouth-breathe, you've crossed ardha shakti. Dial back.<br>
+      <strong>Sleep Over Everything:</strong> Good sleep does more for belly fat than any workout.
+    </div>
+  </div>
+
+  <h3 class="section-header">Weekly Structure</h3>
+  <div class="card">
+    <table class="compare-table">
+      <tr><th>Day</th><th>Gym</th><th>Home / Throughout Day</th></tr>
+      <tr><td><strong>Mon</strong></td><td>Strength Day 1 (30 min)</td><td>AM yoga 10 min + snacks + evening walk</td></tr>
+      <tr><td><strong>Tue</strong></td><td>Strength Day 2 (30 min)</td><td>AM yoga 10 min + snacks + evening walk</td></tr>
+      <tr><td><strong>Wed</strong></td><td>No gym (or makeup day)</td><td>AM yoga 30-45 min deep session + snacks + evening walk</td></tr>
+      <tr><td><strong>Thu</strong></td><td>Strength Day 4 (30 min)</td><td>AM yoga 10 min + snacks + evening walk</td></tr>
+      <tr><td><strong>Fri</strong></td><td>Strength Day 5 (30 min)</td><td>AM yoga 10 min + snacks + evening walk</td></tr>
+      <tr><td><strong>Sat</strong></td><td>No gym</td><td>AM yoga 10 min + snacks + evening walk</td></tr>
+      <tr><td><strong>Sun</strong></td><td>No gym</td><td>Rest. AM yoga if you feel like it. Walk only.</td></tr>
+    </table>
+    <div class="food-tip"><strong>Wednesday flex rule:</strong> Yoga recovery by default. If you missed a strength day (bad sleep, Oura readiness below 70, meetings), slide the missed session here. Never skip strength AND use Wednesday for yoga — one or the other.</div>
+  </div>
+
+  <h3 class="section-header">Morning Yoga (Daily, 10 min)</h3>
+  <div class="card">
+    <div class="card-title">Primary — Surya Namaskar Flow</div>
+    <div class="food-detail" style="font-size:12px">
+      3-4 rounds of Surya Namaskar (8-10 min) → 1 min Savasana or seated breathing. Covers forward folds (compress abdomen, stimulate agni), backbends (open chest, counteract desk posture), lunges (hip flexors), plank + transitions (core), down dog (posterior chain). Breath-synchronized = natural pranayama.<br><br>
+      <strong>Modification:</strong> In chaturanga (low plank), drop knees to floor before lowering — protects ribs.
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Variations (Rotate for Freshness)</div>
+    <div class="food-item">
+      <div class="food-name">Stiff Body Day — Mobility Focus</div>
+      <div class="food-detail" style="font-size:12px">Cat-Cow × 10 → Down Dog 1 min → Low Lunge R/L → Pigeon R/L → Thread the Needle R/L → Seated Twist R/L → Forward Fold</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Restless Mind Day — Grounding Focus</div>
+      <div class="food-detail" style="font-size:12px">3 slow Surya Namaskar rounds (hold each pose 3 breaths) → Legs Up the Wall 3 min → Nadi Shodhana 3 min</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Low Energy Day — Energizing</div>
+      <div class="food-detail" style="font-size:12px">3 faster Surya Namaskar rounds → Warrior I + Warrior II + Triangle flow R/L → Standing backbend → Forward fold → Mountain pose with 5 deep breaths</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Wednesday Deep Session (30-45 min)</div>
+      <div class="food-detail" style="font-size:12px">4-5 Surya Namaskar rounds → Low Lunge R/L → Half Split R/L → Pigeon R/L hold 2 min each → Thread the Needle R/L → Cobra/Sphinx → Seated Forward Fold → Supine Twist R/L → Happy Baby → Butterfly → <strong>Neck: Ear to shoulder R/L 30 sec each → gentle neck circles 5 each direction → chin tucks × 10</strong> → Legs Up the Wall 5 min → Savasana 3-5 min. Then core circuit.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Exercise Snacks (Throughout Day)</h3>
+  <div class="card">
+    <div class="food-item">
+      <div class="food-name">Mid-Morning — Break Sitting Kapha (5-10 min)</div>
+      <div class="food-detail" style="font-size:12px">Pick ONE per day: Walk around building (5-10 min). Bodyweight squats × 15 + wall push-ups × 10 + calf raises × 20 (3 min). Dance to one song with earbuds (3-4 min). Stair climbing 3-5 flights. <strong>Always add:</strong> Chin Tucks × 10 (1 min at desk — strengthens deep neck flexors weakened by forward head posture).</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Post-Lunch — Walk (15-20 min) <span class="badge badge-eat">Most Important</span></div>
+      <div class="food-detail" style="font-size:12px">Non-negotiable. Reduces post-meal glucose spikes by up to 30%. Digestive support (shatapavali). Cortisol reduction. Walk outside if possible — sunlight helps circadian rhythm and D3 synthesis. Even 10 min is better than skipping.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Afternoon — Energy Reset (5 min, 2-3pm)</div>
+      <div class="food-detail" style="font-size:12px">Standing desk work 20-30 min. Chair squats × 10 + standing calf raises × 20 (2 min). Walk to get water (hydration reminder). 5 min walk outside — afternoon sunlight is energizing.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Post-Dinner — Walk (20-30 min)</div>
+      <div class="food-detail" style="font-size:12px">Already in your protocol. Every day including weekends. With someone if possible (Pillar 6). Gentle pace, not exercise.</div>
+    </div>
+    <div class="food-tip"><strong>No jump rope</strong> — plantar fascia and knee history. Replace with brisk walk, stairs, or dancing for same cardio stimulus without joint impact.</div>
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Gym Warmup (7 min)</div>
+    <div class="protocol-step" data-step="→">5 min elliptical</div>
+    <div class="protocol-step" data-step="→">Glute Bridges × 15 (activation)</div>
+    <div class="protocol-step" data-step="→">Clamshells × 12 ea side (hip activation)</div>
+    <div class="protocol-step" data-step="→">Lateral Band Walk × 12 ea side (hip abductors + knee protection)</div>
+    <div class="protocol-step" data-step="→">Band External Rotation × 15 ea side (rotator cuff protection)</div>
+    <div class="protocol-step" data-step="•">45-60 sec rest between working exercises. Leave 1-2 reps in the tank.</div>
+  </div>
+
+  <h3 class="section-header">Strength Days (30 min, In & Out)</h3>
+
+  <div class="card">
+    <div class="card-title">Day 1 (Mon) — Push + Lower</div>
+    <table class="compare-table">
+      <tr><th>Exercise</th><th>Sets</th><th>Reps</th></tr>
+      <tr><td>Goblet Squat</td><td>3</td><td>10-12</td></tr>
+      <tr><td>Hip Thrust (bench)</td><td>3</td><td>12-15</td></tr>
+      <tr><td>DB Chest Press</td><td>3</td><td>10-15</td></tr>
+      <tr><td>DB Shoulder Press</td><td>3</td><td>10-15</td></tr>
+      <tr><td>Cable Pallof Press</td><td>3</td><td>10 ea</td></tr>
+      <tr><td colspan="3" style="color:var(--saffron);font-weight:600">Extended Exhale Breathing — 2 min</td></tr>
+    </table>
+    <div class="food-tip" style="font-size:11px"><strong>Targets:</strong> Quads, glutes, hamstrings, chest, shoulders, triceps (indirect), core. Pallof = only direct anti-rotation work targeting deep belly area.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Day 2 (Tue) — Pull + Posterior Chain</div>
+    <table class="compare-table">
+      <tr><th>Exercise</th><th>Sets</th><th>Reps</th></tr>
+      <tr><td>Romanian Deadlift</td><td>3</td><td>12-15</td></tr>
+      <tr><td>One-Arm Row (seated/supported)</td><td>3</td><td>10-12 ea</td></tr>
+      <tr><td>Cable Lat Pulldown</td><td>3</td><td>12</td></tr>
+      <tr><td>Step Downs</td><td>3</td><td>10-12 ea</td></tr>
+      <tr><td>Cable Face Pulls</td><td>3</td><td>15</td></tr>
+      <tr><td colspan="3" style="color:var(--saffron);font-weight:600">Extended Exhale Breathing — 2 min</td></tr>
+    </table>
+    <div class="food-tip" style="font-size:11px"><strong>Targets:</strong> Full posterior chain, lats, upper back, rear delts, biceps (indirect), core. Step downs = knee/ankle/plantar fascia rehab. Face pulls = desk posture (1x/week only — daily Surya Namaskar covers posture on other days).</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Wednesday — Home: Yoga Deep Session + Core Circuit</div>
+    <div class="food-detail" style="font-size:12px;margin-bottom:8px">
+      <strong>Yoga deep session (30-45 min)</strong> — see yoga variations section above. Then:
+    </div>
+    <table class="compare-table">
+      <tr><th>Exercise</th><th>Sets</th><th>Reps</th></tr>
+      <tr><td>Bird Dog</td><td>3</td><td>10 ea</td></tr>
+      <tr><td>Dead Bug</td><td>3</td><td>12</td></tr>
+      <tr><td>Bear Plank Hold</td><td>3</td><td>30-45s</td></tr>
+      <tr><td>Bear Plank Shoulder Taps</td><td>3</td><td>10 ea</td></tr>
+      <tr><td>Toe Taps</td><td>3</td><td>15</td></tr>
+      <tr><td colspan="3" style="color:var(--saffron);font-weight:600">Extended Exhale Breathing — 2 min</td></tr>
+    </table>
+    <div class="food-tip" style="font-size:11px"><strong>No equipment needed.</strong> All bodyweight, on a mat at home. Core isolation work that was cut from gym days returns here as a dedicated session. Core circuit is a cooldown to the deep yoga, not a separate workout.<br><br><strong>Flex rule:</strong> If you missed a gym strength day this week, replace Wednesday yoga+core with the missed strength session. Move yoga to Sunday.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Day 4 (Thu) — Lower + Rotation + Pull</div>
+    <table class="compare-table">
+      <tr><th>Exercise</th><th>Sets</th><th>Reps</th></tr>
+      <tr><td>Box Squat</td><td>3</td><td>10-12</td></tr>
+      <tr><td>Reverse Lunges</td><td>3</td><td>10 ea</td></tr>
+      <tr><td>Incline DB Press</td><td>3</td><td>10-12</td></tr>
+      <tr><td>Cable Woodchoppers</td><td>3</td><td>10 ea</td></tr>
+      <tr><td>Seated Cable Row (wide grip)</td><td>3</td><td>12</td></tr>
+      <tr><td colspan="3" style="color:var(--saffron);font-weight:600">Extended Exhale Breathing — 2 min</td></tr>
+    </table>
+    <div class="food-tip" style="font-size:11px"><strong>Targets:</strong> Posterior chain, quads, glutes, upper chest, obliques, mid-back/rhomboids. Box squat + reverse lunges = massive lower body calorie burn. Seated cable row (wide grip) hits mid-back from a different angle than D2's one-arm row. Lateral band walk moved to daily warmup.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Day 5 (Fri) — Full Body Flow (Venus Day)</div>
+    <table class="compare-table">
+      <tr><th>Exercise</th><th>Sets</th><th>Reps</th></tr>
+      <tr><td>Kettlebell RDL</td><td>3</td><td>12-15</td></tr>
+      <tr><td>Kettlebell Swing</td><td>3</td><td>15</td></tr>
+      <tr><td>Goblet Squat to Press</td><td>3</td><td>10</td></tr>
+      <tr><td>Single-Arm Farmer's Carry</td><td>2</td><td>30-40 steps ea</td></tr>
+      <tr><td>DB Lateral Raises</td><td>2</td><td>12</td></tr>
+      <tr><td colspan="3" style="color:var(--saffron);font-weight:600">Extended Exhale Breathing — 2 min</td></tr>
+    </table>
+    <div class="food-tip" style="font-size:11px"><strong>Targets:</strong> Posterior chain (RDL slow + Swing explosive = contrast training), full body (squat-to-press), core anti-lateral flexion + grip (farmer's carry), medial deltoid (lateral raises). Only explosive movement in the entire plan — KB swing adds power development and massive calorie burn. Zero rows — differentiates completely from D2 and D4.<br><br><strong>Day 5 alternate:</strong> Replace KB Swing with Single-Leg RDL (3×10 each side) on days you want balance/rehab work instead of explosive power. Both are valid — swing for power days, single-leg RDL for stability days.</div>
+  </div>
+
+  <h3 class="section-header">Weekly Muscle Balance</h3>
+  <div class="card">
+    <table class="compare-table">
+      <tr><th>Muscle</th><th>Hits/Week</th><th>Where</th></tr>
+      <tr><td>Quads</td><td style="color:var(--yes)">4x</td><td>D1 Goblet, D2 Steps, D4 Box+Lunges, D5 Squat-to-Press</td></tr>
+      <tr><td>Glutes</td><td style="color:var(--yes)">5x</td><td>D1 Hip Thrust, D2 RDL, D4 Box+Lunges, D5 RDL+Swing</td></tr>
+      <tr><td>Hamstrings</td><td style="color:var(--yes)">4x</td><td>D2 RDL, D4 Box, D5 KB RDL+Swing</td></tr>
+      <tr><td>Back/Lats</td><td style="color:var(--yes)">3x</td><td>D2 Row+Pulldown, D4 Cable Row</td></tr>
+      <tr><td>Chest</td><td style="color:var(--yes)">2x</td><td>D1 Flat Press, D4 Incline Press</td></tr>
+      <tr><td>Shoulders</td><td style="color:var(--yes)">2x</td><td>D1 OH Press, D5 Lateral Raises</td></tr>
+      <tr><td>Rear Delts/Posture</td><td style="color:var(--yes)">1x + daily</td><td>D2 Face Pulls + daily Surya Namaskar cobra</td></tr>
+      <tr><td>Core (gym)</td><td style="color:var(--yes)">2x</td><td>D1 Pallof, D4 Woodchoppers</td></tr>
+      <tr><td>Core (home)</td><td style="color:var(--yes)">1x dedicated</td><td>Wed: Bird Dog, Dead Bug, Bear Plank, Taps, Toe Taps</td></tr>
+      <tr><td>Core (integrated)</td><td style="color:var(--yes)">Every day</td><td>All compounds + Surya Namaskar + Farmer's Carry</td></tr>
+      <tr><td>Hip Abductors</td><td style="color:var(--yes)">Daily</td><td>Warmup: Clamshells + Band Walks</td></tr>
+      <tr><td>Explosive Power</td><td style="color:var(--yes)">1x</td><td>D5 KB Swing</td></tr>
+      <tr><td>Grip/Traps</td><td style="color:var(--yes)">1x</td><td>D5 Farmer's Carry</td></tr>
+      <tr><td>Arms</td><td>Indirect</td><td>Rows (biceps), Presses (triceps)</td></tr>
+      <tr><td>Knee/Ankle Rehab</td><td style="color:var(--yes)">1x</td><td>D2 Step Downs</td></tr>
+    </table>
+  </div>
+
+  <h3 class="section-header">Exercise How-To Guide</h3>
+
+  <div class="card">
+    <div class="card-title">Warmup Exercises</div>
+    <div class="food-item">
+      <div class="food-name">Glute Bridges</div>
+      <div class="food-detail" style="font-size:12px">Lie on back, knees bent, feet flat on floor hip-width apart. Push through heels, squeeze glutes, lift hips until body forms a straight line from shoulders to knees. Hold 1 sec at top. Lower slowly. Don't arch your lower back — think "squeeze glutes" not "push hips high."</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Clamshells</div>
+      <div class="food-detail" style="font-size:12px">Lie on side, knees bent 90 degrees, feet together. Keep feet touching, open top knee like a clamshell opening. Don't let your hips roll backward — that's your back doing the work, not your glute. Small controlled movement. Feel it in the side of your hip, not your back.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Lateral Band Walk</div>
+      <div class="food-detail" style="font-size:12px">Place mini band just above knees (or around ankles for harder). Stand in quarter squat position — knees slightly bent, hips back. Step sideways, leading with one foot, other foot follows. Keep tension on the band the entire time — never let feet come fully together. 12 steps one direction, 12 back. Stay low. Feel it burn in the outer hip.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Band External Rotation <span class="badge badge-eat">New — Rotator Cuff</span></div>
+      <div class="food-detail" style="font-size:12px">Attach a light resistance band to a rack or pole at elbow height. Stand sideways to the anchor. Grab the band with the far hand. Elbow bent 90 degrees, pinned tight to your side (tuck a towel between elbow and ribs if it helps). Keeping elbow glued to side, rotate your forearm outward away from your body against the band. Slow and controlled — 2 sec out, 2 sec back. 15 reps then switch sides. You should feel it deep in the back of your shoulder, not in your arm. Light band only — this is a small muscle, heavy resistance defeats the purpose.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Strength Exercises — How To</div>
+    <div class="food-item">
+      <div class="food-name">Goblet Squat</div>
+      <div class="food-detail" style="font-size:12px">Hold a dumbbell or kettlebell at chest level with both hands, elbows pointing down. Feet shoulder-width, toes slightly out. Sit back and down like sitting into a chair. Knees track over toes. Go as deep as comfortable — ideally thighs parallel to floor. Drive through heels to stand. The weight at your chest keeps you upright automatically.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Hip Thrust</div>
+      <div class="food-detail" style="font-size:12px">Sit on the floor with upper back against a bench. Roll a barbell or place a heavy dumbbell across your hip crease (use a pad for comfort). Feet flat, knees bent. Drive through heels, squeeze glutes hard, lift hips until body forms a straight line from shoulders to knees. Chin stays tucked — don't look at the ceiling. Hold 1 sec at top. Lower slowly. This is the most effective glute exercise that exists.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Romanian Deadlift (RDL)</div>
+      <div class="food-detail" style="font-size:12px">Stand holding dumbbells or barbell in front of thighs. Slight bend in knees (keep this fixed — knees don't move during the exercise). Push hips BACK like you're closing a car door with your butt. Let the weight slide down the front of your legs. Go until you feel a strong hamstring stretch — usually mid-shin level. Drive hips forward to stand. Back stays flat the entire time. This is a hip hinge, not a squat — the movement comes from your hips, not your knees.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Box Squat</div>
+      <div class="food-detail" style="font-size:12px">Set a bench or box behind you at a height where your thighs are parallel when seated. Hold dumbbells at sides or a kettlebell goblet-style. Squat down and SIT on the box — fully sit, don't just touch and go. Pause 1 second (this kills the stretch reflex, making your muscles work harder to stand back up). Drive through heels to stand. Teaches proper depth and protects knees because you're sitting back rather than forward.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Reverse Lunges</div>
+      <div class="food-detail" style="font-size:12px">Stand holding dumbbells at sides. Step one foot BACKWARD (not forward — backward lunges are easier on knees). Lower until back knee nearly touches floor. Front shin stays vertical — knee doesn't push past toes. Drive through front heel to stand back up. Alternate legs or do all reps on one side then switch.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Step Downs</div>
+      <div class="food-detail" style="font-size:12px">Stand on a step or low box on one leg. Slowly lower the other foot toward the ground by bending the standing knee. Tap the ground lightly with the heel of the lowering foot — don't put weight on it. Push back up through the standing leg. Very slow and controlled — 3 seconds down, 1 second up. This is rehab for knee, ankle, and plantar fascia. The control matters more than the depth.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">One-Arm Row (Seated/Supported)</div>
+      <div class="food-detail" style="font-size:12px">One hand and one knee on a bench for support (or use a seated cable row single-handle). Pull the dumbbell from a hanging arm position up toward your hip — not toward your chest. Elbow drives straight back, grazing your ribs. Squeeze shoulder blade at the top. Lower slowly. The support position protects your ribs — never do unsupported bent-over rows.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Seated Cable Row (Wide Grip)</div>
+      <div class="food-detail" style="font-size:12px">Sit at the cable row machine with a wide bar attachment. Feet on the foot pads, knees slightly bent. Pull the bar toward your lower chest/upper belly. Squeeze shoulder blades together at the end. Slow return — don't let the weight yank you forward. Sit tall throughout. The wide grip targets mid-back and rhomboids more than the narrow grip.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Cable Lat Pulldown</div>
+      <div class="food-detail" style="font-size:12px">Sit at the lat pulldown machine, thighs secured under the pads. Grab the wide bar with an overhand grip slightly wider than shoulder width. Pull the bar down to your upper chest — NOT behind your neck. Lean back slightly. Squeeze lats at the bottom. Slow return up. Think "pull elbows into your back pockets" — this cue activates lats instead of biceps.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Cable Face Pulls</div>
+      <div class="food-detail" style="font-size:12px">Set a cable with rope attachment at face height. Grab both ends of the rope. Step back until there's tension. Pull the rope toward your face, separating the ends as you pull — finish with hands beside your ears, elbows high and wide. Squeeze shoulder blades together. Slow return. Light weight, high reps. This is a posture exercise, not a strength exercise — don't ego lift.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Cable Pallof Press</div>
+      <div class="food-detail" style="font-size:12px">Set a cable at chest height. Stand sideways to the machine. Clasp the handle at your chest with both hands. Press your hands straight out in front of you. The cable is trying to rotate you toward the machine — resist it. Hold arms extended 2-3 seconds. Return to chest. That resisting-the-pull is what works your deep core. Stand tall, brace your abs like someone's about to poke your belly.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Cable Woodchoppers</div>
+      <div class="food-detail" style="font-size:12px">Set cable at highest position. Stand sideways to the machine. Grab handle with both hands above the far shoulder. Pull diagonally across your body and down toward the opposite hip — like chopping wood. Your arms stay relatively straight — the rotation comes from your torso, not your arms. Control the return. This is the most calorie-intensive core exercise because it uses the entire trunk in rotation.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Kettlebell Swing <span class="badge badge-eat">New — Only Explosive Movement</span></div>
+      <div class="food-detail" style="font-size:12px">Stand with feet slightly wider than shoulder-width, KB on the floor slightly in front of you. Hinge at hips (like an RDL), grab the handle with both hands. Hike the KB back between your legs like a football snap. Then SNAP your hips forward explosively — squeeze glutes hard at the top. The KB swings up to chest height from the hip power alone. Your arms are just hooks — they don't lift the KB. Let it swing back between legs and repeat. The power comes from your hip snap, not your arms or shoulders. Start with a lighter KB until the hip-snap pattern feels natural.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Single-Arm Farmer's Carry <span class="badge badge-eat">New</span></div>
+      <div class="food-detail" style="font-size:12px">Pick up one heavy dumbbell in one hand. Stand tall — don't lean toward the weight. Walk 30-40 steps in a straight line. Your obliques on the opposite side are firing hard to keep you upright — that's the core work. Switch hands, walk back. Keep your shoulders level, chest up, normal stride. It should feel like you're trying NOT to lean. Heavier is better for core challenge — use a weight that makes it genuinely hard to stay straight.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Single-Leg RDL <span class="badge badge-limit">Day 5 Alternate</span></div>
+      <div class="food-detail" style="font-size:12px">Stand on one leg holding a dumbbell or KB in the opposite hand. Hinge forward at the hip — the free leg goes straight back behind you as a counterbalance. Lower the weight toward the floor until you feel a strong hamstring stretch on the standing leg. Drive hip forward to stand. Keep the standing knee slightly bent. If balance is hard, lightly touch a wall or rack with your free hand. This is balance + hamstring + ankle stability in one movement.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">DB Lateral Raises</div>
+      <div class="food-detail" style="font-size:12px">Stand holding light dumbbells at your sides. Raise both arms out to the sides until they're parallel with the floor — like making a T shape. Slight bend in elbows. Lead with your elbows, not your hands (imagine pouring water from a pitcher). Slow lower — 3 seconds down. Light weight only — the medial deltoid is small. If you're swinging or using momentum, the weight is too heavy.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Home Core Exercises — How To</div>
+    <div class="food-item">
+      <div class="food-name">Bird Dog</div>
+      <div class="food-detail" style="font-size:12px">Start on hands and knees. Extend right arm forward and left leg backward simultaneously — forming a straight line from fingertips to toes. Hold 2 seconds. Return. Switch sides. Keep your hips level — don't let them rotate or tilt. Imagine balancing a cup of water on your lower back. Slow and controlled — this is about stability, not speed.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Dead Bug</div>
+      <div class="food-detail" style="font-size:12px">Lie on back, arms pointing straight up toward ceiling, knees bent 90 degrees above hips. Press your lower back firmly into the floor — this is the critical part. Slowly extend right arm overhead and left leg out straight, hovering above the floor. Return. Switch sides. Your lower back MUST stay pressed to the floor the entire time. If it arches, you've gone too far. The moment your back lifts, the exercise stopped working.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Bear Plank Hold</div>
+      <div class="food-detail" style="font-size:12px">Start on hands and knees. Tuck your toes and lift your knees just 2 inches off the ground. Hold. That's it. Knees hover, back flat, core braced. Harder than it looks — you'll feel your entire core within 15 seconds. Don't let your hips pike up or sag down. Breathe normally.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Bear Plank Shoulder Taps</div>
+      <div class="food-detail" style="font-size:12px">Same position as bear plank hold. Now lift one hand and tap the opposite shoulder. Return. Switch sides. The challenge: don't let your hips shift side to side when you lift a hand. Your hips should stay completely still while your hand moves. Slower = harder = better.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Toe Taps</div>
+      <div class="food-detail" style="font-size:12px">Lie on back, legs raised with knees bent 90 degrees above hips (tabletop position). Lower one foot to tap the floor gently, then return to tabletop. Alternate legs. Lower back stays pressed to floor the entire time — same rule as dead bug. If your back arches, don't lower the foot as far. The control matters more than touching the floor.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Desk & Posture Exercises</div>
+    <div class="food-item">
+      <div class="food-name">Chin Tucks <span class="badge badge-eat">New — Neck Posture</span></div>
+      <div class="food-detail" style="font-size:12px">Sit or stand tall, looking straight ahead. Pull your chin straight backward — like you're making a double chin. Don't tilt your head up or down. Just slide the chin back. You'll feel a gentle stretch at the base of your skull and a tightening in the front of your neck. Hold 5 seconds. Release. Repeat 10 times. This strengthens the deep neck flexors that weaken from forward head posture (looking at screens all day). Do at your desk during exercise snack breaks — no one notices.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Neck Stretches (Wednesday Yoga)</div>
+      <div class="food-detail" style="font-size:12px"><strong>Ear to shoulder:</strong> Sit tall, gently drop right ear toward right shoulder. Don't lift the shoulder — let gravity do the work. Optional: place right hand on left side of head for gentle added stretch. Hold 30 sec. Switch sides.<br><strong>Neck circles:</strong> Slowly roll head in a full circle — ear to shoulder, chin to chest, other ear to shoulder, head back. 5 circles each direction. Very slow — if anything feels pinchy, skip that part of the circle.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Post-Workout Recovery</h3>
+  <div class="card">
+    <div class="card-title">Pick ONE — don't stack multiple</div>
+    <div class="food-item">
+      <div class="food-name">Option A: Rapid Release (lowest speed) <span class="badge badge-eat">Your best option</span></div>
+      <div class="food-detail">Percussion therapy increases blood flow, reduces DOMS (delayed onset muscle soreness), breaks up fascial tension. At lowest speed, vibration activates parasympathetic nervous system. More targeted and effective than foam rolling, and you already own it.</div>
+      <div class="food-tip"><strong>Protocol:</strong> After exhale breathing cooldown → 30-60 sec per muscle group on quads, hamstrings, calves, upper back, glutes. Total 3-5 min. <strong>Avoid:</strong> directly on spine, ribs (your history), and bony prominences.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Option B: Sauna <span class="badge badge-eat">Best for cortisol</span></div>
+      <div class="food-detail">Lowers cortisol, releases endorphins and growth hormone. Keeps body anabolic (muscle-building) not catabolic (muscle-breaking). Ayurveda: swedana (sweating therapy) — reduces Kapha, opens srotas, moves ama.</div>
+      <div class="food-tip"><strong>Protocol:</strong> Finish workout → exhale breathing 2 min → wait 10-15 min → sauna 10-15 min → hydrate before and after. Infrared sauna (120-150°F) gentler than dry (174-190°F). <strong>Seasonal:</strong> Best Oct–Apr. Shorter in summer.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Option C: Foam Roller <span class="badge badge-limit">Backup</span></div>
+      <div class="food-detail">If Rapid Release isn't with you. Roll quads, hamstrings, calves, upper back. Slow rolls, pause on tender spots 20-30 sec. Tennis ball between back and wall for shoulders.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚠</span> Gym vs Home — Different Tools, Different Purpose</div>
+    <div class="food-detail" style="font-size:12px">
+      <strong>Post-workout (gym):</strong> Rapid Release or sauna or foam roller. This is <em>mechanical recovery</em> — muscles, fascia, blood flow. Stimulating. Wakes tissue up.<br><br>
+      <strong>Evening (home):</strong> Warm oil padabhyanga with hands only. This is <em>neurological calming</em> — oil absorption through feet, warmth of hands, slow intentional touch. Settles the nervous system. Do NOT use the Rapid Release at night — vibration is stimulating, the opposite of what bedtime needs.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Evening: Padabhyanga (Foot Oil Massage)</div>
+    <div class="food-detail"><strong>Foot massage alone</strong> calms the entire nervous system — feet contain nerve endings connected to every organ. Hands only, no device.</div>
+    <div class="food-tip"><strong>Routine:</strong> After shower, warm 1 tbsp coconut oil (summer) or sesame oil (winter) in palms. Massage soles of both feet, press firmly into the arch, work each toe. 3-5 min. Add calves and forearms if you have time. Before triphala + nutmeg drink.</div>
+  </div>
+
+  </div>
+</div>
+
+<!-- ==================== PILLARS TAB ==================== -->
+<div class="tab-content" id="tab-pillars">
+  <div style="padding-top:16px">
+
+  <h3 class="section-header">Pillar 1: Whole Food Nutrition</h3>
+  <div class="card">
+    <div class="food-detail">
+      Majority of plate = whole, minimally processed plants. Not necessarily vegan — plants as foundation, not side dish. For mandagni: not just <em>what</em> you eat but whether your body can transform it into nourishment.
+    </div>
+    <div class="food-tip" style="margin-top:10px">
+      See <strong>Food</strong>, <strong>Grains</strong>, and <strong>Flours</strong> tabs for complete detailed guide.
+    </div>
+  </div>
+
+  <h3 class="section-header">Pillar 2: Physical Activity</h3>
+
+  <div class="constitution">
+    <strong>Your Exercise Profile</strong>
+    Cortisol-driven belly fat · Mandagni (exercise must strengthen, not deplete agni) · 4-day strength + 1-day yoga/cardio plan · No HIIT · No barbell bent-over rows · Gym: cables, dumbbells, kettlebells, barbells, elliptical · Oura ring tracking
+  </div>
+
+  <div class="quick-ref">
+    <strong>The Core Principle</strong><br>
+    Lifestyle med: 150 min moderate cardio/week + 2x strength training. Ayurveda: exercise to half capacity (ardha shakti) — when sweat appears on forehead and breathing becomes slightly labored, stop. Strength training may be 27% more effective than cardio alone at reducing abdominal fat.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚡</span> The Cortisol-Exercise Paradox</div>
+    <div class="food-detail">
+      Belly fat has more cortisol receptors than fat elsewhere — highly responsive to stress-related weight gain. Also more sensitive to insulin resistance, creating a vicious cycle. HIIT triggers significant cortisol spikes — for your already-elevated cortisol pattern, it can paradoxically increase abdominal fat. Your instinct to avoid HIIT is constitutional intelligence, not avoidance.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⏰</span> Timing</div>
+    <div class="food-detail">
+      <strong>Best: Morning 6-10am (Kapha time)</strong><br>
+      Natural strength and stamina peak. Morning workouts burn up to 20% more fat due to cortisol rhythms. Exercise uses morning cortisol productively for fat mobilization instead of storage.<br><br>
+      <strong>Acceptable: Before 2pm</strong><br>
+      If morning doesn't work. Avoid Pitta time (10-2) if possible — can disturb digestion.<br><br>
+      <strong>Avoid: After 6pm</strong><br>
+      Late exercise disrupts melatonin production and cortisol's nighttime decline. Light walk only after 6pm.
+    </div>
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Your Hybrid Movement Day</div>
+    <div class="protocol-step" data-step="1.">Wake → CCF or methi water → B12 sublingual</div>
+    <div class="protocol-step" data-step="2.">Morning yoga 10 min (Surya Namaskar or variation)</div>
+    <div class="protocol-step" data-step="3.">Tea + soaked almonds → Gym 30 min (strength days) OR movement snacks (rest days)</div>
+    <div class="protocol-step" data-step="4.">Extended exhale breathing → 15 min gap → Breakfast</div>
+    <div class="protocol-step" data-step="5.">Mid-morning movement snack (walk, squats, dance, stairs — 5-10 min)</div>
+    <div class="protocol-step" data-step="6.">Post-lunch walk 15-20 min (most important snack — reduces glucose spikes 30%)</div>
+    <div class="protocol-step" data-step="7.">Afternoon energy reset (2-3pm, 5 min movement)</div>
+    <div class="protocol-step" data-step="8.">Post-dinner walk 20-30 min</div>
+    <div class="protocol-step" data-step="•">Total: ~500+ min weekly movement, distributed so no single session exceeds ardha shakti.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">◈</span> Exercise Hierarchy</div>
+    <div class="food-item">
+      <div class="food-name">Best <span class="badge badge-eat">Primary</span></div>
+      <div class="food-detail">Compound strength training (squat, deadlift, press, row — cables/dumbbells/kettlebells). Yoga (hatha, gentle vinyasa). Walking. Elliptical at conversational pace. Swimming.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Good <span class="badge badge-eat">Rotation</span></div>
+      <div class="food-detail">Pilates (core-focused). Dance (rhythmic, Kapha-balancing). Cycling moderate pace. Hiking.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Limit <span class="badge badge-limit">Caution</span></div>
+      <div class="food-detail">Running (increases Vata, rough on joints). Hot yoga (increases Pitta, dehydrating). Heavy competitive sports (cortisol from competition stress).</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Avoid <span class="badge badge-avoid">Skip</span></div>
+      <div class="food-detail">HIIT (cortisol spike). CrossFit WODs (fight-or-flight). Afternoon heat training. Training on poor sleep. Barbell bent-over rows (rib displacement history).</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">✦</span> What Your Current Plan Gets Right</div>
+    <div class="food-detail">
+      Calm-paced exercise pairs (not supersets) keep cortisol low. Core work every session targets belly musculature. Extended exhale breathing closing every session activates parasympathetic nervous system. Excluding barbell bent-over rows = ardha shakti principle in action.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">+</span> What to Add</div>
+    <div class="food-item">
+      <div class="food-name">Post-Dinner Walk <span class="badge badge-eat">Daily 20-30 min</span></div>
+      <div class="food-detail">Gentle, not exercise. Digestive practice (Ayurveda: shatapavali — 100 steps after meals). Lowers evening cortisol. Aids digestion. Walk with someone if possible (covers Pillar 6 too).</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Post-Workout Self-Massage <span class="badge badge-eat">5 min</span></div>
+      <div class="food-detail">Ashtanga Hridaya: "After exercising, all parts of body should be massaged comfortably." Foam rolling or self-massage with coconut oil (summer) / sesame oil (winter). Calms Vata that exercise elevates.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Seasonal Intensity Adjustment</div>
+      <div class="food-detail">Winter/spring: can push closer to full capacity. Summer: dial down — fewer sets, lighter weights, more yoga/mobility. Oura recovery scores will reflect this pattern.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">☯</span> Exercise + Agni Connection</div>
+    <div class="food-detail">
+      Exercise done correctly <em>strengthens agni</em> — Charaka says regular vyayama allows a person to "easily digest even incompatible food." Your CCF tea, ginger water, triphala all become <em>more effective</em> when paired with consistent exercise. But over-exercising with mandagni destroys agni — leads to tissue loss, depleted immunity, paradoxical weight gain.<br><br>
+      <strong>The test:</strong> After training you should feel energized, light, and hungry within 1-2 hours. If exhausted, heavy, or no appetite — you've gone past ardha shakti.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">👃</span> Nasal Breathing Gauge</div>
+    <div class="food-detail">
+      If you can breathe through your nostrils throughout the workout, you're within ardha shakti. The moment you must mouth-breathe, you've crossed the threshold. Nasal breathing also activates parasympathetic system — keeps cortisol lower than mouth-breathing at the same exertion level. No heart rate monitor needed.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚠</span> When NOT to Exercise</div>
+    <div class="food-detail">
+      Poor sleep (Oura shows low readiness). During periods (Vata + Pitta dominant — exercise increases both, leading to pain and heavy bleeding; gentle walk or restorative yoga only). Immediately after meals. When feeling sick or depleted. During extreme afternoon heat.
+    </div>
+  </div>
+
+  <h3 class="section-header">Pillar 3: Restorative Sleep</h3>
+
+  <div class="constitution">
+    <strong>Your Sleep Profile</strong>
+    Runs hot at night / sweats (correct — Pitta releasing during 10pm-2am repair window) · Moon in Libra = Vata mind, restless thoughts · Kapha body = 6-7 hrs ideal, don't oversleep · Oura ring tracking · Triphala + nutmeg nighttime drink · Shakti Beeja Mantra before sleep · 8pm food cutoff
+  </div>
+
+  <div class="quick-ref">
+    <strong>The Core Principle</strong><br>
+    Sleep is THE most important factor for cortisol-driven belly fat. Cortisol drops to its lowest 10pm-2am — if you're awake, cortisol stays elevated, growth hormone is suppressed, body stays in fat-storage mode. A good night's sleep does more for belly fat than any workout.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⏰</span> The Ayurvedic Sleep Clock</div>
+    <div class="food-item">
+      <div class="food-name">6-10pm — Kapha Time <span class="badge badge-eat">Wind Down</span></div>
+      <div class="food-detail">Natural heaviness and drowsiness. Ride this wave into sleep by 10pm. Light dinner, walk, evening rituals all happen here. If you catch the Kapha wave, you fall asleep easily and naturally.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">10pm-2am — Pitta Time <span class="badge badge-avoid">Must Be Asleep</span></div>
+      <div class="food-detail">Internal cleansing and tissue repair. Pitta works INSIDE — digesting the day, repairing cells, processing emotions. If awake past 10pm, Pitta gives a "second wind" — you feel alert and hungry. This is your repair cycle being hijacked. Late-night snacking = Pitta agni misfiring outward.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">2-6am — Vata Time <span class="badge badge-lm">Natural Wake</span></div>
+      <div class="food-detail">Light, dreaming sleep. Vata naturally lightens sleep toward morning. Wake by 6am. Consistency matters more than waking at 4:30am.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">☯</span> Where Both Systems Agree</div>
+    <div class="food-item">
+      <div class="food-name">Consistent wake time > consistent bedtime</div>
+      <div class="food-detail">Your body clock sets from when you wake, not when you sleep. Pick a wake time, protect it — even weekends.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Morning light within 30 min of waking</div>
+      <div class="food-detail">Resets circadian clock, suppresses melatonin at the right time. Step outside or sunny window. Cloudy daylight = 10x brighter than indoor lights. Your morning Sun practice is circadian medicine.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">No screens after 9pm</div>
+      <div class="food-detail">Blue light suppresses melatonin up to 50%. Last hour before sleep = calming activities only. Physical books fine; phone/tablet not.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Cool, dark room (65-68°F)</div>
+      <div class="food-detail">You run hot — this is correct for your constitution. Cool temps significantly improve deep sleep %. Your body releases excess Pitta heat during the 10pm-2am window. Support it, don't fight it.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Left-side sleeping</div>
+      <div class="food-detail">Ayurveda: keeps right nostril (Pingala/solar) active for digestion. Modern anatomy: aids gastric emptying, reduces reflux.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">No daytime naps</div>
+      <div class="food-detail">Increases Kapha — you'll feel heavier, not more rested. Exception: summer heat when nighttime sleep is disrupted.</div>
+    </div>
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Your Sleep Protocol</div>
+    <div class="protocol-step" data-step=" "><strong style="color:var(--saffron)">Evening (6:30-9pm)</strong></div>
+    <div class="protocol-step" data-step="→">Light dinner by 7:30pm</div>
+    <div class="protocol-step" data-step="→">Post-dinner walk 20-30 min</div>
+    <div class="protocol-step" data-step="→">Screens off by 9pm</div>
+    <div class="protocol-step" data-step="→">Triphala + nutmeg warm water</div>
+    <div class="protocol-step" data-step="→">Padabhyanga (foot massage) if doing it</div>
+    <div class="protocol-step" data-step="→">Light reading, music, or family time</div>
+    <div class="protocol-step" data-step=" "><strong style="color:var(--saffron)">Bedtime (9:30-10pm)</strong></div>
+    <div class="protocol-step" data-step="→">Nasya: drop of ghee in each nostril (calms Vata in head)</div>
+    <div class="protocol-step" data-step="→">Shakti Beeja Mantra</div>
+    <div class="protocol-step" data-step="→">Extended exhale breathing 2-3 min (inhale 4, exhale 6-8)</div>
+    <div class="protocol-step" data-step="→">Sleep on left side, room cool + dark + quiet</div>
+    <div class="protocol-step" data-step=" "><strong style="color:var(--saffron)">Morning (6am)</strong></div>
+    <div class="protocol-step" data-step="→">Consistent wake time — protect it, even weekends</div>
+    <div class="protocol-step" data-step="→">Sunlight within 30 min (morning Sun practice)</div>
+    <div class="protocol-step" data-step="→">CCF/methi water → tea + almonds → workout</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⌚</span> Oura Ring — What to Track</div>
+    <div class="food-item">
+      <div class="food-name">Sleep Score <span class="badge badge-eat">Headline</span></div>
+      <div class="food-detail">Aim consistently above 75. Below 70 = skip heavy training, do yoga/walk instead.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Deep Sleep % <span class="badge badge-eat">Fat metabolism</span></div>
+      <div class="food-detail">Where growth hormone peaks and fat burning happens. Target 15-20% of total sleep. Below 12% consistently = check room temp, dinner timing, screen habits.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">HRV <span class="badge badge-eat">Recovery</span></div>
+      <div class="food-detail">Higher = better recovery. Track YOUR baseline, not others'. Week-long downward trend = overtraining, under-sleeping, or overstressed. Reduce training intensity.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Body Temperature <span class="badge badge-limit">Watch</span></div>
+      <div class="food-detail">Consistently elevated = inflammation or hormonal shifts. Sudden spike can predict illness 1-2 days before symptoms.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Readiness Score <span class="badge badge-eat">Go/No-Go</span></div>
+      <div class="food-detail">Below 70 = yoga/walk day, not strength day. Ardha shakti principle measured objectively.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">+</span> Sleep Enhancers</div>
+    <div class="food-item">
+      <div class="food-name">Magnesium Glycinate <span class="badge badge-eat">200-400mg</span></div>
+      <div class="food-detail">Improves deep sleep, calms nervous system, reduces muscle tension. Most people are deficient. Take 30-60 min before bed alongside triphala water. No interactions. The one supplement both systems agree on for your sleep profile.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Nasya Oil / Ghee in Nostrils <span class="badge badge-eat">10 seconds</span></div>
+      <div class="food-detail">Classical ratricharya. Drop of plain organic ghee in each nostril lubricates nasal passages, calms Vata in the head, promotes sound sleep.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Legs Up the Wall <span class="badge badge-eat">5 min</span></div>
+      <div class="food-detail">Reverses blood flow, activates parasympathetic response, brings Vata-spinning mind to Kapha-stillness. First-line intervention on nights your mind won't settle.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚠</span> Sleep Disruptors</div>
+    <div class="food-detail" style="font-size:12px">
+      <strong>Staying awake past 10pm</strong> — hijacks the Pitta repair cycle, causes second wind and late snacking<br>
+      <strong>Screens in bed</strong> — melatonin suppression up to 50%<br>
+      <strong>Heavy or late dinner</strong> — forces agni to work during sleep, creates ama<br>
+      <strong>Afternoon caffeine</strong> — half-life is 5-6 hours, evening coffee = midnight stimulant<br>
+      <strong>Evening exercise</strong> — elevates cortisol when it should be dropping<br>
+      <strong>Oversleeping</strong> — increases Kapha, causes morning heaviness and weight gain. 6-7 hrs is YOUR target, not 8-9<br>
+      <strong>Arguments or distressing content before bed</strong> — aggravates both Vata (anxiety) and Pitta (anger), worst combination for sleep<br>
+      <strong>Inconsistent wake times</strong> — destabilizes circadian rhythm more than inconsistent bedtimes
+    </div>
+  </div>
+
+  <h3 class="section-header">Pillar 4: Stress Management</h3>
+
+  <div class="constitution">
+    <strong>Your Stress Profile</strong>
+    Cortisol-driven belly fat (stress = fat storage) · Moon in Libra = Vata mind (oscillates, weighs options endlessly) · Cancer lagna = emotional absorption · Stress suppresses mandagni directly · Extensive existing spiritual practice · Starting new role at LPL (transition stress)
+  </div>
+
+  <div class="quick-ref">
+    <strong>The Core Principle</strong><br>
+    For your body, stress management IS fat management. Every unresolved cortisol spike gets stored as abdominal fat. Your belly fat isn't just a food or exercise problem — it's an incomplete stress cycle problem.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">✦</span> What You're Already Doing (& Why It Works)</div>
+    <div class="food-item">
+      <div class="food-name">Om Namah Shivay</div>
+      <div class="food-detail">Creates the "relaxation response" — measurable decrease in heart rate, blood pressure, cortisol, and sympathetic activity. Your baseline anchor. Don't change it.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Om Chandraya Namaha 11x (morning)</div>
+      <div class="food-detail">Moon-strengthening for your 25% Moon. Lunar mantras activate cooling, calming, parasympathetic pathways. Sets the nervous system's tone for the entire day.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Shakti Beeja Mantra (before sleep)</div>
+      <div class="food-detail">Transitions nervous system from daytime sympathetic to nighttime parasympathetic rest. Your wind-down signal.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Extended Exhale Breathing (post-workout)</div>
+      <div class="food-detail">The single most evidence-backed stress intervention. Activates vagus nerve within 2-3 min. An 8-week study found effects comparable to pharmaceutical anxiolytics without side effects.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Morning Sun Practice</div>
+      <div class="food-detail">Circadian regulation + spiritual grounding + cortisol rhythm setting in one practice.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">+</span> The Two Additions</div>
+    <div class="food-item">
+      <div class="food-name">Nadi Shodhana (Alternate Nostril Breathing) <span class="badge badge-eat">Add to morning</span></div>
+      <div class="food-detail">Most researched pranayama for stress. 2025 trial: significantly reduces BP and sympathetic activity via vagus nerve. Balances Ida (lunar/cooling) and Pingala (solar/heating). For Libra Moon: stops the oscillation between options by integrating both brain hemispheres. 4 weeks of consistent practice = significant stress reduction.</div>
+      <div class="food-tip"><strong>How:</strong> Right hand Vishnu Mudra (fold index + middle fingers). Close right nostril with thumb → inhale left 4 counts → hold both closed 4 counts → open right, exhale 6 counts → inhale right 4 → hold 4 → open left, exhale 6. That's 1 round. Do 5-7 rounds. Total: 5 min.<br><br><strong>When:</strong> After Om Chandraya Namaha, before the rest of your morning. Extends existing practice by 5 min.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Physiological Sigh <span class="badge badge-eat">Acute rescue tool</span></div>
+      <div class="food-detail">Stanford neuroscience. Double inhale through nose (short + second short to fully expand lungs) → one long exhale through mouth. One cycle reduces heart rate and cortisol within 30 seconds. Fastest acute stress intervention that exists.</div>
+      <div class="food-tip"><strong>When:</strong> Before meetings. After difficult conversations. During work frustration. In traffic. Any moment cortisol spikes. No one can see you do it. Takes 5 seconds. Repeat 2-3x if needed.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">☯</span> Where Both Systems Agree</div>
+    <div class="food-item">
+      <div class="food-name">Nature Exposure <span class="badge badge-eat">20 min</span></div>
+      <div class="food-detail">20 min in natural setting reduces cortisol 21% (University of Michigan). Ayurveda: Vata-calming, prana-balancing. Post-dinner walk in a park doubles the benefit.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Completing the Stress Cycle</div>
+      <div class="food-detail">The stressor ends (meeting over, email sent) but stress stays in the body. Physical movement, deep breathing, crying, laughing, or creative expression completes the cycle and discharges cortisol. Your workout + exhale breathing does this daily. Risk window: weekends and rest days when neither happens — post-dinner walk is non-negotiable.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Digital Boundaries</div>
+      <div class="food-detail">Constant notifications = low-grade fight-or-flight all day = slow-drip cortisol. No news or social media first hour after waking (protect your morning parasympathetic state). Phone-free meals (eating in fight-or-flight suppresses agni). Screens off by 9pm (already doing).</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Gratitude Practice</div>
+      <div class="food-detail">Reduces cortisol up to 23% over time. Three things you're grateful for, thought silently during morning Sun practice or before Shakti Beeja at night. No journal required.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔧</span> Toolkit — By Situation</div>
+    <div class="food-item">
+      <div class="food-name">Daily Maintenance</div>
+      <div class="food-detail">Morning mantras + Nadi Shodhana → workout + exhale breathing → post-dinner walk → Shakti Beeja + triphala + sleep. Already built into your day.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Acute Stress (5 seconds)</div>
+      <div class="food-detail">Physiological sigh: double inhale nose → long exhale mouth. Repeat 2-3x. Invisible to others.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Before Meetings / Presentations</div>
+      <div class="food-detail">3 rounds Nadi Shodhana in quiet space (bathroom works) → physiological sigh right before entering. This is authority activation through clinical stress management.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">After Difficult Conversations</div>
+      <div class="food-detail">Walk — even 5 minutes around the block. Completes the stress cycle physically. Don't sit and ruminate (Libra Moon's tendency).</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Racing Mind at Night</div>
+      <div class="food-detail">Legs Up the Wall 5 min → Nadi Shodhana 5 min → Shakti Beeja Mantra. Progressive downshift from Vata-spinning to Kapha-stillness.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Weekends / Rest Days</div>
+      <div class="food-detail">Post-dinner walk is non-negotiable even without gym. This is when incomplete stress cycles accumulate. Nature walk if possible.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Pillar 5: Risky Substance Avoidance</h3>
+
+  <div class="quick-ref">
+    <strong>Your Version of This Pillar</strong><br>
+    No alcohol, no tobacco. Your risks are the modern invisible ones: ultra-processed foods, endocrine disruptors in cookware/containers, incompatible food combinations (viruddha ahara), and tamasic food quality from overcooking and reheating.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚠</span> Ultra-Processed Foods (UPFs)</div>
+    <div class="food-detail">Not just junk food. Includes "healthy" items: flavored yogurt, protein bars, breakfast cereals, store-bought bread, ready-made sauces, instant oatmeal packets, bottled smoothies. A 2024 meta-analysis linked UPFs to cardiovascular disease, diabetes, obesity, depression, and all-cause mortality.</div>
+    <div class="food-tip"><strong>The test:</strong> Read ingredient lists, not nutrition labels. More than 5 ingredients with unrecognizable names (emulsifiers, maltodextrin, "natural flavors") = UPF = put it back. Your batch cooking is your best protection.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🧪</span> Endocrine Disruptors</div>
+    <div class="food-item">
+      <div class="food-name">Plastic Containers <span class="badge badge-avoid">Switch to glass</span></div>
+      <div class="food-detail">Never microwave food in plastic. BPA and phthalates leach when heated. "BPA-free" plastics often contain equally harmful BPS/BPF. Glass containers for batch cooking storage and reheating.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Non-Stick / Teflon Cookware <span class="badge badge-avoid">Replace</span></div>
+      <div class="food-detail">PFAS (forever chemicals) release when scratched or overheated. Replace with: Henckels Paradigm Ceramic (PFAS/PFOA/PTFE-free, Costco 11-pc $239), stainless steel, or cast iron. Cast iron adds trace iron to food — beneficial with menstruation.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Plastic Water Bottles <span class="badge badge-avoid">Switch</span></div>
+      <div class="food-detail">Stainless steel or glass. Never drink from plastic left in hot car — heat accelerates chemical leaching dramatically.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Thermal Receipts <span class="badge badge-limit">Decline</span></div>
+      <div class="food-detail">Coated in BPA. Skin absorbs it through touch. Decline paper receipts when possible.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Cleaning Products <span class="badge badge-limit">Simplify</span></div>
+      <div class="food-detail">Phthalates, parabens, synthetic fragrances absorbed through skin and lungs. Alternatives: vinegar + baking soda for most cleaning, castile soap for surfaces.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">☯</span> Viruddha Ahara (Incompatible Combinations)</div>
+    <div class="food-detail" style="font-size:12px">
+      <strong>Fish + dairy</strong> — never in same meal. Channel-blocking toxins.<br>
+      <strong>Milk + sour fruits</strong> — banana shake, mango lassi, fruit smoothie with milk. Curdles in stomach.<br>
+      <strong>Cold milk + banana</strong> — extremely Kapha-increasing, mucus-forming.<br>
+      <strong>Honey + heat</strong> — never cook with honey or add to boiling water. Raw = medicine; heated = toxic.<br>
+      <strong>Yogurt at night</strong> — increases Kapha, suppresses nighttime agni.<br>
+      <strong>Watermelon + salt</strong> — classified as incompatible despite common habit.<br>
+      <strong>Equal ghee + honey</strong> — small amounts of either alone are fine; equal proportions together are toxic per classical texts.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">◈</span> Tamasic Food Quality</div>
+    <div class="food-detail">Fresh = sattvic (nourishing). Reheated/stale = tamasic (heavy, ama-producing). Batch cook for max 2-3 days, not a full week. Reheat on stovetop when possible. Add fresh elements when reheating — squeeze of lemon, fresh coriander, a quick tadka on reheated dal. Your breakfast-always-fresh rule is already aligned.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">☕</span> Caffeine Nuance</div>
+    <div class="food-detail">Half-life is 5-6 hrs. 8am coffee = 50% active at 2pm, 25% at 8pm. If Oura shows deep sleep below 12% consistently, try half-caf for two weeks. Tea (with L-theanine) may be better than coffee for your constitution — promotes calm focus without cortisol spike. Chai with cardamom, cinnamon, ginger counteracts Vata-aggravating quality.</div>
+  </div>
+
+  <h3 class="section-header">Pillar 6: Social Connection</h3>
+
+  <div class="quick-ref">
+    <strong>The Overlooked Pillar</strong><br>
+    This is the one pillar Ayurveda didn't formalize as a standalone intervention. Modern research now shows it's as critical as diet and exercise. Loneliness carries a mortality risk equivalent to smoking 15 cigarettes per day.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span> What the Research Says</div>
+    <div class="food-detail">A meta-analysis of over 3.4 million participants found that social isolation increases mortality risk by 29%, loneliness by 26%, and living alone by 32%. The U.S. Surgeon General identified loneliness as a major public health crisis in 2023 — 58% of U.S. adults report experiencing loneliness. Loneliness is associated with inflammation, defective immune functioning, higher blood pressure, increased risk of cardiovascular disease, cognitive decline, and depression.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">☯</span> How Ayurveda Addresses This</div>
+    <div class="food-detail">Ayurveda didn't have a "social connection pillar" — but it was embedded in the culture. Shared meals, community rituals, multigenerational households, teacher-student (guru-shishya) relationships, and sangha (spiritual community) were assumed, not prescribed. The modern epidemic of loneliness is partly a result of losing these cultural structures without replacing them with anything.</div>
+    <div class="food-tip">For your Ashlesha gandanta lagna and 25% Moon — connection doesn't come naturally. Ashlesha's tendency is to hold close, observe, and control the depth of engagement. The Moon's weakness means emotional reciprocity costs more energy than it does for most people. This doesn't mean you need less connection — it means you need the <em>right kind</em>: depth over breadth, few meaningful relationships over many surface ones.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔧</span> Practical Actions</div>
+    <div class="food-item">
+      <div class="food-name">Post-Dinner Walk With Someone <span class="badge badge-eat">Daily opportunity</span></div>
+      <div class="food-detail">Already in your protocol for digestion and cortisol. Walking side-by-side reduces the pressure of face-to-face interaction — conversations flow more naturally. Family member, neighbor, phone call with a friend while walking.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Phone-Free Shared Meals <span class="badge badge-eat">Weekly minimum</span></div>
+      <div class="food-detail">Eating together is the original social connection practice. Phone-free = actually present. Even 2-3 meals per week fully present with family or friends is protective.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">SVITT Board / Professional Community <span class="badge badge-eat">Already active</span></div>
+      <div class="food-detail">Your SVITT Board of Studies involvement, LPL colleagues, and Mind Meets Design community are meaningful professional connections. These count — professional belonging reduces loneliness as effectively as personal friendships in research.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Spiritual Community (Sangha) <span class="badge badge-eat">Explore</span></div>
+      <div class="food-detail">Gurdwara visits, meditation groups, kirtan — shared spiritual practice creates a unique depth of connection. Sangha is the one community structure Ayurveda explicitly names as health-supporting.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Nature + People Together <span class="badge badge-eat">Double benefit</span></div>
+      <div class="food-detail">Hiking with someone, farmers market visits, walking in parks — combines nature exposure (Pillar 4 stress reduction) with social connection. Both benefits multiply rather than just adding.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚠</span> What Doesn't Count</div>
+    <div class="food-detail" style="font-size:12px">
+      <strong>Social media scrolling</strong> — increases perceived isolation, not connection. Passive consumption is the worst form.<br>
+      <strong>Transactional interactions</strong> — work emails, delivery handoffs, checkout lines. Functional but not nourishing.<br>
+      <strong>Large group events without depth</strong> — networking events, parties where you talk to many but connect with none.<br>
+      <strong>Digital-only relationships</strong> — supplementary but not sufficient. In-person presence activates different neural pathways than text/video.
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<!-- ==================== PROTOCOLS TAB ==================== -->
+<div class="tab-content" id="tab-protocols">
+  <div style="padding-top:16px">
+
+  <h3 class="section-header">Daily Food Protocol</h3>
+  <div class="protocol">
+    <div class="protocol-title">Night Before (10 sec)</div>
+    <div class="protocol-step" data-step="→">Most nights: ½ tsp jeera + ½ tsp dhaniya + ½ tsp saunf in a glass of water</div>
+    <div class="protocol-step" data-step="→">3 nights/week: 1 tsp methi seeds in water instead</div>
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Morning</div>
+    <div class="protocol-step" data-step="→">Strain soaked water → warm 30 sec → drink → discard seeds</div>
+    <div class="protocol-step" data-step="→">B12 sublingual under tongue (dissolve while doing morning practice)</div>
+    <div class="protocol-step" data-step="→">Morning mantras (Om Chandraya Namaha 11x, Om Namah Shivay)</div>
+    <div class="protocol-step" data-step="→">Nadi Shodhana 5 min (5-7 rounds)</div>
+    <div class="protocol-step" data-step="→">Tea + soaked peeled almonds</div>
+    <div class="protocol-step" data-step="→">Workout (strength or yoga, 6-10am ideal)</div>
+    <div class="protocol-step" data-step="→">Extended exhale breathing cooldown</div>
+    <div class="protocol-step" data-step="→">15–20 min gap</div>
+    <div class="protocol-step" data-step="→">Breakfast 7–8am: Besan cheela + eggs OR daliya upma OR ragi porridge</div>
+    <div class="protocol-step" data-step="→">Max 1 coffee, morning only</div>
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Midday (Largest Meal)</div>
+    <div class="protocol-step" data-step="→">Lunch 12–1:30pm during peak agni</div>
+    <div class="protocol-step" data-step="→">Dal + sabzi + roti (jowar/wheat-barley/ragi rotation) OR Basmati rice (drain method + ghee)</div>
+    <div class="protocol-step" data-step="→">Small chicken/fish portion if having protein</div>
+    <div class="protocol-step" data-step="→">Chaas with roasted jeera + rock salt (transforms yogurt into digestive aid)</div>
+    <div class="protocol-step" data-step="→">Vitamin D3+K2 with this meal (fat-soluble, needs ghee)</div>
+    <div class="protocol-step" data-step="→">Few saunf seeds or saunf water after meal — digestive closer</div>
+  </div>
+
+  <div class="protocol">
+    <div class="protocol-title">Evening</div>
+    <div class="protocol-step" data-step="→">Dinner 6:30–7:30pm — keep light</div>
+    <div class="protocol-step" data-step="→">Khichdi OR light sabzi with rice OR soup</div>
+    <div class="protocol-step" data-step="→">No yogurt, no raw food, no heavy protein</div>
+    <div class="protocol-step" data-step="→">Post-dinner walk 20–30 min (gentle, digestive, not exercise)</div>
+    <div class="protocol-step" data-step="→">Nothing after 8pm</div>
+    <div class="protocol-step" data-step="→">30 min before bed: warm water + ½ tsp triphala + pinch nutmeg + magnesium glycinate</div>
+  </div>
+
+  <h3 class="section-header">Weekly Grain Rotation</h3>
+  <div class="card">
+    <table class="compare-table">
+      <tr><th>Day</th><th>Lunch Grain</th><th>Dinner Grain</th></tr>
+      <tr><td>Mon</td><td>Jowar roti</td><td>Basmati rice</td></tr>
+      <tr><td>Tue</td><td>Wheat-barley roti</td><td>Basmati rice</td></tr>
+      <tr><td>Wed</td><td>Jowar roti</td><td>Khichdi</td></tr>
+      <tr><td>Thu</td><td>Wheat-barley roti</td><td>Basmati rice</td></tr>
+      <tr><td>Fri</td><td>Ragi roti / dosa</td><td>Basmati rice</td></tr>
+      <tr><td>Sat</td><td>Missi roti (wheat+besan)</td><td>Light — soup/khichdi</td></tr>
+      <tr><td>Sun</td><td>Flex / makki (winter)</td><td>Basmati rice</td></tr>
+    </table>
+  </div>
+
+  <h3 class="section-header">Protein Stacking Guide</h3>
+  <div class="card">
+    <div class="food-detail">
+      <strong>Target: 80–90g/day</strong><br><br>
+      <strong>Breakfast (~20g):</strong> 2 eggs (12g) + besan cheela (8–10g)<br>
+      <strong>Lunch (~35g):</strong> Moong dal 1 cup (14g) + small chicken/fish (15–18g) + roti/rice (3–4g)<br>
+      <strong>Snack (~10g):</strong> Roasted chana (8g) or soaked almonds (6g) + chaas (4g)<br>
+      <strong>Dinner (~20g):</strong> Dal/khichdi (12–14g) + sabzi (3–4g) + rice (2–3g)
+    </div>
+    <div class="food-tip" style="margin-top:10px">
+      Plant protein combos that make complete proteins: moong dal + rice, chole + roti, rajma + rice, besan + any grain.
+    </div>
+  </div>
+
+  <h3 class="section-header">Nighttime Protocol</h3>
+  <div class="protocol">
+    <div class="protocol-title">Before Bed (30 min)</div>
+    <div class="protocol-step" data-step="→">Warm water + ½ tsp triphala powder + pinch of nutmeg</div>
+    <div class="protocol-step" data-step="→">Steep 10 minutes, drink warm</div>
+    <div class="protocol-step" data-step="→">Zero calories. No milk, no ghee, no sugar.</div>
+    <div class="protocol-step" data-step="•">Triphala cleans digestive channels overnight (ama removal)</div>
+    <div class="protocol-step" data-step="•">Nutmeg is a natural sedative — promotes deep sleep</div>
+    <div class="protocol-step" data-step="•">Triphala chosen over ashwagandha: gut cleaning is higher priority for mandagni than cortisol management. Tridoshic = safe long-term.</div>
+  </div>
+
+  <h3 class="section-header">Digestive Support</h3>
+  <div class="protocol">
+    <div class="protocol-title">Agni-Kindling Practices</div>
+    <div class="protocol-step" data-step="•">Ginger + lemon + rock salt warm water 10-15 min before lunch</div>
+    <div class="protocol-step" data-step="•">Hing in every dal — mandagni prescription</div>
+    <div class="protocol-step" data-step="•">Ajwain in all besan preparations</div>
+    <div class="protocol-step" data-step="•">Ghee with meals — kindles agni, coats starch</div>
+    <div class="protocol-step" data-step="•">Warm/room temp water only with meals</div>
+    <div class="protocol-step" data-step="•">Chaas (buttermilk) > yogurt at lunch</div>
+    <div class="protocol-step" data-step="•">Saunf seeds or saunf water after meals</div>
+    <div class="protocol-step" data-step="•">No cold drinks, cold salads, or cold leftovers straight from fridge</div>
+    <div class="protocol-step" data-step="•">Kitchari day when digestion feels off (moong dal + rice + ghee + spices — system reboot)</div>
+  </div>
+
+  <h3 class="section-header">Supplements — What, Why & How</h3>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">💊</span> Your Stack — 4 Confirmed</div>
+    <div class="food-detail" style="font-size:12px;margin-bottom:10px">Each supplement is targeted at a confirmed need with the correct form for your mandagni. No prenatal can replace this stack — doses, forms, and delivery methods are specifically chosen for your absorption limitations.</div>
+
+    <div class="food-item">
+      <div class="food-name">1. Vitamin B12 <span class="badge badge-avoid">DEFICIENT: 141 pg/mL</span></div>
+      <div class="food-detail"><strong>Product:</strong> Kirkland Signature Quick Dissolve B-12, 5000 mcg, Methylcobalamin (Costco)</div>
+      <div class="food-detail"><strong>When:</strong> Morning, empty stomach. Dissolve under tongue during morning mantras (2-3 min). Don't chew or swallow — let it absorb through mouth tissue.</div>
+      <div class="food-tip">
+        <strong>Why methylcobalamin, not cyanocobalamin?</strong> Cyanocobalamin is synthetic — your body must convert it to the active form in the liver, producing a tiny cyanide byproduct. For mandagni with already-weak metabolic processing, giving the body more conversion work defeats the purpose. Methylcobalamin IS the active form — no conversion needed, your cells use it immediately.<br><br>
+        <strong>Why sublingual, not swallowed pills?</strong> B12 absorption from food requires stomach acid + intrinsic factor → small intestine absorption. Your mandagni (low stomach acid) breaks this chain. Swallowed B12 pills go through the same broken pathway. Sublingual absorbs directly through mouth tissue into bloodstream — completely bypasses the stomach, intestines, and intrinsic factor requirement.<br><br>
+        <strong>Why 5000 mcg?</strong> At 141 pg/mL you're clinically deficient (normal starts at 200, optimal is 400+). This is correction dosing, not maintenance. After 3-month retest shows normalization above 400, drop to 1000-2500 mcg maintenance. Never stop entirely — mandagni is constitutional, not temporary.<br><br>
+        <strong>What it fixes:</strong> Fat metabolism (enables fat breakdown), energy production (every cell needs B12 for ATP), protein synthesis (muscles can finally build from your workouts), nerve function (myelin sheath repair), mood (serotonin + dopamine production), red blood cells, afternoon crash.
+      </div>
+    </div>
+
+    <div class="food-item">
+      <div class="food-name">2. Vitamin D3 + K2 <span class="badge badge-avoid">LOW: 23 ng/mL</span></div>
+      <div class="food-detail"><strong>Product:</strong> Sports Research D3+K2, 5000 IU D3 + 100 mcg K2 as MK-7, with Coconut MCT (Costco)</div>
+      <div class="food-detail"><strong>When:</strong> With lunch — MUST take with a meal containing fat. D3 is fat-soluble and literally cannot absorb without fat present. Your lunch with ghee is the ideal vehicle. Never on empty stomach.</div>
+      <div class="food-tip">
+        <strong>Why D3, not D2?</strong> D2 (ergocalciferol) is plant-derived and requires two conversion steps to become active. D3 (cholecalciferol) is the same form your skin produces from sunlight — one conversion step, more potent, longer lasting, 60-70% more effective at raising blood levels.<br><br>
+        <strong>Why K2 is critical with D3:</strong> D3 dramatically increases calcium absorption from your gut. Without K2, that extra calcium has no traffic director — it floats in blood and deposits in arteries (calcification), kidneys (stones), and soft tissues. K2 activates two proteins: osteocalcin (pulls calcium INTO bones) and Matrix GLA protein (prevents calcium FROM depositing IN arteries). D3 opens the calcium floodgates. K2 is the traffic cop. Without K2, D3 supplementation can increase cardiovascular risk. With K2, it's both safe and effective.<br><br>
+        <strong>Why MK-7, not MK-4?</strong> MK-4 has a 6-hour half-life — you'd need multiple daily doses. MK-7 has a 72-hour half-life — one daily dose maintains steady protection. MK-7 accumulates to a steady state over ~2 weeks. Daily dosing doesn't overdose because MK-7 gets consumed in each calcium-directing reaction. No known toxicity level.<br><br>
+        <strong>Why 5000 IU isn't too high:</strong> At 23 ng/mL you need correction, not maintenance. Endocrine Society uses up to 50,000 IU weekly (≈7000/day) for severe deficiency. Toxicity doesn't occur until blood levels exceed 100-150 ng/mL, requiring 10,000+ IU daily for months. After D reaches 40-60 on retest, drop to 2000 IU maintenance.<br><br>
+        <strong>Why low despite San Diego sun:</strong> Darker skin (higher melanin) requires significantly more UV exposure for same D3 synthesis. Belly fat sequesters vitamin D — trapping it in adipose tissue and pulling it from bloodstream. Low D promotes more fat, more fat traps more D = vicious cycle. Supplementation breaks the cycle from outside.<br><br>
+        <strong>What it fixes:</strong> Immune function, bone density, belly fat cycle (breaks D-sequestration loop), mood regulation, brain wakefulness signaling (reduces afternoon sleepiness), calcium metabolism (with K2).
+      </div>
+    </div>
+
+    <div class="food-item">
+      <div class="food-name">3. Magnesium Glycinate <span class="badge badge-eat">Sleep + Recovery</span></div>
+      <div class="food-detail"><strong>Product:</strong> Pure Encapsulations Magnesium Glycinate (practitioner-grade) OR Nature's Bounty Magnesium Glycinate 240mg</div>
+      <div class="food-detail"><strong>When:</strong> Bedtime, 30 min before sleep. With triphala + nutmeg warm water (when you start that protocol). 240mg dose.</div>
+      <div class="food-tip">
+        <strong>Why glycinate, not oxide or citrate?</strong> Magnesium oxide = 4% absorption, 96% passes through unabsorbed, causes diarrhea. Basically a laxative. Citrate = 25-30% absorption, still has significant laxative effect. Glycinate = ~80% absorption, gentle on stomach, no laxative effect. The glycine carrier is itself a calming neurotransmitter — so you get magnesium for deep sleep PLUS glycine for relaxation. Two benefits from one molecule.<br><br>
+        <strong>Why at bedtime?</strong> Magnesium promotes muscle relaxation, calms nervous system, and supports the deep sleep phase where growth hormone peaks and 11β-HSD1 (belly fat cortisol factory) gets suppressed. Taking it morning would waste the sleep benefits.<br><br>
+        <strong>What it fixes:</strong> Deep sleep quality (Oura deep sleep % should improve), muscle recovery, nervous system calming, 11β-HSD1 suppression during sleep, overall relaxation.
+      </div>
+    </div>
+
+    <div class="food-item">
+      <div class="food-name">4. Probiotic <span class="badge badge-eat">Post-Antibiotic Recovery</span></div>
+      <div class="food-detail"><strong>Product:</strong> Garden of Life Dr. Formulated Advanced Women's Daily Care, 45 Billion CFU, 17 Strains</div>
+      <div class="food-detail"><strong>When:</strong> With breakfast or lunch. Take with food — food buffers stomach acid, helping bacteria survive to reach intestines. Don't take within 2 hours of triphala (cleansing vs colonization work against each other).</div>
+      <div class="food-tip">
+        <strong>Why you need this now:</strong> Recent UTI antibiotic killed gut bacteria including beneficial strains that support B12 absorption, immune function, and digestion. The same gut bacteria also produce some B vitamins — antibiotics wiped these producers out.<br><br>
+        <strong>Why capsule, not liquid probiotic?</strong> Capsule shell protects bacteria from stomach acid during transit to intestines where they colonize. Liquid exposes bacteria to acid immediately, killing a significant percentage before they arrive.<br><br>
+        <strong>Why this product covers vaginal health too:</strong> Contains Lactobacillus reuteri and fermentum strains that support both gut and vaginal flora. Since UTI was a one-off (not recurrent), this single product covers both needs.<br><br>
+        <strong>Duration:</strong> 6-8 weeks minimum. Then stop or continue periodically. Your chaas/buttermilk, fermented foods, and dal maintain what the probiotic rebuilds.<br><br>
+        <strong>What it fixes:</strong> Gut microbiome diversity, B12 absorption support, immune recovery, digestive balance, vaginal flora protection.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⏰</span> Daily Supplement Schedule</div>
+    <table class="compare-table">
+      <tr><th>When</th><th>What</th><th>How</th></tr>
+      <tr><td><strong>Morning</strong></td><td>B12 sublingual 5000 mcg</td><td>Under tongue during mantras. Empty stomach OK.</td></tr>
+      <tr><td><strong>Breakfast/Lunch</strong></td><td>Probiotic (45B CFU)</td><td>With food. Can combine with lunch if you forget breakfast.</td></tr>
+      <tr><td><strong>Lunch</strong></td><td>D3+K2 softgel</td><td>WITH meal containing fat/ghee. Never empty stomach.</td></tr>
+      <tr><td><strong>Bedtime</strong></td><td>Magnesium glycinate 240mg</td><td>With warm water (+ triphala + nutmeg when ready).</td></tr>
+    </table>
+    <div class="food-tip">If you forget morning B12 and probiotic, take all three (B12 + probiotic + D3+K2) together at lunch. All are compatible. Only magnesium MUST stay at bedtime.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">◈</span> Optional — Already Owned</div>
+    <div class="food-item">
+      <div class="food-name">Magnesium L-Threonate (Magtein) <span class="badge badge-limit">As needed</span></div>
+      <div class="food-detail">Sports Research, 2000mg (144mg elemental). Only magnesium that crosses blood-brain barrier. For brain fog, focus, cognitive clarity. Morning or early afternoon, not bedtime. NOT a replacement for glycinate — different purpose.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">L-Theanine <span class="badge badge-limit">As needed</span></div>
+      <div class="food-detail">Sports Research, 200mg. Calming amino acid from tea. For stressful work days — take with morning tea. NOT in the daily stack. Keep at desk for when needed.</div>
+    </div>
+  </div>
+
+  <h3 class="section-header">Blood Work & Testing</h3>
+
+  <div class="card">
+    <div class="card-title">July 2026 Results — Baseline</div>
+    <table class="compare-table">
+      <tr><th>Test</th><th>Result</th><th>Range</th><th>Status</th></tr>
+      <tr><td>Vitamin B12</td><td><strong>141</strong></td><td>200-900 pg/mL</td><td style="color:var(--no)">Clinically deficient</td></tr>
+      <tr><td>Vitamin D (25-OH)</td><td><strong>23</strong></td><td>30-100 ng/mL</td><td style="color:var(--no)">Insufficient</td></tr>
+      <tr><td>TSH</td><td>1.15</td><td>0.4-4.0</td><td style="color:var(--yes)">Ideal</td></tr>
+      <tr><td>Hemoglobin</td><td>12.4</td><td>12-16 g/dL</td><td style="color:var(--yes)">Low-normal</td></tr>
+      <tr><td>WBC</td><td>11</td><td>4.5-11.0</td><td style="color:var(--caution)">Upper ceiling (lifelong pattern — possible chronic low-grade inflammation)</td></tr>
+      <tr><td>Platelets</td><td>320</td><td>150-400</td><td style="color:var(--caution)">Upper range (reinforces mild inflammation picture)</td></tr>
+      <tr><td>Ferritin</td><td>Normal</td><td>—</td><td style="color:var(--yes)">No iron supplementation needed</td></tr>
+      <tr><td>Cortisol</td><td>Normal</td><td>—</td><td style="color:var(--yes)">Single draw — doesn't rule out rhythm disruption or local 11β-HSD1 activity</td></tr>
+      <tr><td>Prolactin</td><td>Normal</td><td>—</td><td style="color:var(--yes)">Normal</td></tr>
+      <tr><td>Estradiol</td><td>Normal</td><td>—</td><td style="color:var(--yes)">Normal</td></tr>
+      <tr><td>Metabolic Panel</td><td>Normal</td><td>—</td><td style="color:var(--yes)">Normal</td></tr>
+      <tr><td>CBC</td><td>Normal</td><td>—</td><td style="color:var(--yes)">Normal (except WBC/platelets upper range)</td></tr>
+    </table>
+    <div class="food-tip"><strong>Key insight:</strong> B12 at 141 despite eating chicken + eggs = absorption problem, not intake. This IS mandagni on a blood test. Low stomach acid can't cleave B12 from protein in food. Sublingual bypasses the broken pathway entirely.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔬</span> Tests To Get Next</div>
+    <div class="food-detail" style="margin-bottom:8px">Request all in one blood draw. Call doctor or use patient portal.</div>
+    <div class="food-item">
+      <div class="food-name">hs-CRP (High-Sensitivity C-Reactive Protein)</div>
+      <div class="food-detail">Direct measure of systemic inflammation. Below 1.0 = low risk. 1.0-3.0 = moderate (chronic inflammation confirmed). Above 3.0 = high risk. With WBC at 11 and platelets at 320, this test confirms or rules out the inflammation picture. Don't test during illness, UTI recovery, injury, or first days of period — acute inflammation falsely elevates results.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Folate (Serum)</div>
+      <div class="food-detail">B12's metabolic partner — both needed for the methylation cycle (DNA synthesis, homocysteine recycling, neurotransmitter production). Same mandagni that impairs B12 could affect folate. If low, supplement with methylfolate (NOT folic acid) at 400-800 mcg. If normal, your diet (dal, palak, besan, chole) is handling it.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">Homocysteine</div>
+      <div class="food-detail">Downstream marker that reveals if B12 + folate system is actually working. Homocysteine is toxic to blood vessel linings, promotes clotting, damages brain cells, amplifies inflammation, weakens bones, and increases pregnancy complication risk. Below 10 μmol/L = normal. Elevated = methylation cycle stalled. Correcting B12 alone often normalizes within 3-6 months.</div>
+    </div>
+    <div class="food-item">
+      <div class="food-name">MTHFR Gene Test</div>
+      <div class="food-detail">One-time genetic test — tells you permanently if you carry the mutation that prevents converting folic acid to usable methylfolate. Common in South Asian populations. 4.2x higher probability of B12 deficiency with this mutation. If positive: lifelong methylfolate (not folic acid), explains why B12 deficiency developed. If negative: B12 issue is primarily mandagni-driven. Critical to know before any prenatal vitamin decision.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📅</span> Testing Schedule</div>
+    <table class="compare-table">
+      <tr><th>When</th><th>Tests</th><th>Goal</th></tr>
+      <tr><td><strong>ASAP</strong></td><td>hs-CRP, Folate, Homocysteine, MTHFR</td><td>Complete the baseline picture</td></tr>
+      <tr><td><strong>3 months</strong></td><td>B12, Vitamin D</td><td>B12 above 400. D above 35. If yes, reduce B12 to 2500 mcg, keep D3 at 5000 IU</td></tr>
+      <tr><td><strong>6 months</strong></td><td>Full panel: B12, D, CBC, CRP, homocysteine</td><td>B12 above 500. D at 40-60 (drop to 2000 IU maintenance). WBC trending down? Homocysteine below 10?</td></tr>
+      <tr><td><strong>12 months</strong></td><td>Full panel repeat</td><td>Long-term stability confirmed. Adjust maintenance doses.</td></tr>
+    </table>
+  </div>
+
+  </div>
+</div>
+
+<!-- Footer Navigation -->
+<div class="footer-nav">
+  <button class="footer-btn active" data-tab="overview"><span class="f-icon">◉</span>Home</button>
+  <button class="footer-btn" data-tab="food"><span class="f-icon">❋</span>Food</button>
+  <button class="footer-btn" data-tab="workout"><span class="f-icon">⚡</span>Workout</button>
+  <button class="footer-btn" data-tab="waters"><span class="f-icon">◆</span>Waters</button>
+  <button class="footer-btn" data-tab="protocols"><span class="f-icon">▣</span>Daily</button>
+</div>
+
+<script>
+// Tab switching
+function switchToTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.footer-btn').forEach(b => b.classList.remove('active'));
+
+  const tab = document.getElementById('tab-' + tabId);
+  if (tab) tab.classList.add('active');
+
+  document.querySelectorAll(`.tab-btn[data-tab="${tabId}"]`).forEach(b => b.classList.add('active'));
+  document.querySelectorAll(`.footer-btn[data-tab="${tabId}"]`).forEach(b => b.classList.add('active'));
+
+  window.scrollTo(0, 0);
+}
+
+// Main tab clicks
+document.querySelectorAll('.tab-btn, .footer-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchToTab(btn.dataset.tab));
+});
+
+// Subtab switching
+document.querySelectorAll('.subtab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const parent = btn.closest('.tab-content');
+    parent.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+    parent.querySelectorAll('.subtab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    const target = document.getElementById('subtab-' + btn.dataset.subtab);
+    if (target) target.classList.add('active');
+  });
+});
+
+// Collapsible sections
+document.querySelectorAll('.collapsible-header').forEach(header => {
+  header.addEventListener('click', () => {
+    header.classList.toggle('open');
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+  });
+});
+
+// Prevent overscroll bounce on iOS
+document.body.addEventListener('touchmove', function(e) {}, { passive: true });
+</script>
+
+</body>
+</html>
